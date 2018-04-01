@@ -2,6 +2,24 @@
 
 \chapter{Introduction}
 
-Check Final Year Project Guide for the content of introduction chapter.
+Specialized hardware for running deep learning algorithms seems to be a natural step in the evolution of
+Artificial Intelligence.  Google, for exmaple, developed its own ASIC named Tensor Processing Unit (TPU)
+to accelerate tensor computations. The formidable cost of such endeavors limits ASIC development to the big
+players in the industry. For tech startups and hobbists, the Field Programmable Gate Array (FPGA) comes to
+rescue by filling the gap of high-cost custimzed ICs and the need to make specialized hardware for certain
+applications.
+
+Generative models are a class of machine learning algorithms which, instead of processing real world data,
+creates fresh and new data that did not exist before. In other words, such algorithms can enable the machine
+to paint new paintings, compose new music, and write new poetries.
+
+Generative Adversarial Networks (GANs) are a class of neural networks in which two different networks are
+trained to complete against each other to learn about the probability distribution of a particular dataset.
+
+The marriage of FPGA and GANs seems to be an interesting topic in its own right. The project explores such
+possiblities by implementing a pre-trained generator model of GANs on the FPGA board to generate realistic
+pictures. Being a deep convolutional neural network, a large part of the computation of the model is done
+with the General Matrix Multiplication (GEMM) operation. Therefore, an efficient implementation of GEMM
+is crutial to the acceleration.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

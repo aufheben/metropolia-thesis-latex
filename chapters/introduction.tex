@@ -23,7 +23,7 @@ possiblities by implementing a pre-trained generator model of GANs on the FPGA b
 pictures. A näive version is presented first, then several optimization possibilities are explored. This
 paper serves as a rather detailed documentation of the design and implementation process.
 
-The generator is a deep Convolutional Neural Network (CNN), in which a large part of the computation is
+The generator is a deep Convolutional Neural Network (CNN). In such networks a large part of the computation is
 done with an operation called the General Matrix Multiplication (GEMM). Therefore, an efficient implementation
 of GEMM is crutial to the acceleration. However, CNNs are normally implemented with floating-point numbers,
 which are much less efficient to handle in hardware than fixed-point numbers. If only we could carry out

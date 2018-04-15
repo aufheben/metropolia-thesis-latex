@@ -6,20 +6,29 @@ Specialized hardware for running deep learning algorithms seems to be a natural 
 Artificial Intelligence.  Google, for exmaple, developed its own ASIC named Tensor Processing Unit (TPU)
 to accelerate tensor computations. The formidable cost of such endeavors limits ASIC development to the big
 players in the industry. For tech startups and hobbists, the Field Programmable Gate Array (FPGA) comes to
-rescue by filling the gap of high-cost custimzed ICs and the need to make specialized hardware for certain
+rescue by filling the gap between high-cost custimzed ICs and the need to make specialized hardware for certain
 applications.
 
 Generative models are a class of machine learning algorithms which, instead of processing real world data,
-creates fresh and new data that did not exist before. In other words, such algorithms can enable the machine
-to paint new paintings, compose new music, and write new poetries.
+creates fresh and new data the world has never seen before. In other words, such algorithms enables
+the machine to paint new paintings, compose new music, and write new poetries.
 
 Generative Adversarial Networks (GANs) are a class of neural networks in which two different networks are
 trained to complete against each other to learn about the probability distribution of a particular dataset.
+Introduced in 2014 by Ian Goodfellow \textit{et al}., it soon gained polularity in the machine learning
+community, kindled a wave of research on improving the training property and quality of generation of GANs.
 
 The marriage of FPGA and GANs seems to be an interesting topic in its own right. The project explores such
 possiblities by implementing a pre-trained generator model of GANs on the FPGA board to generate realistic
-pictures. Being a deep convolutional neural network, a large part of the computation of the model is done
-with the General Matrix Multiplication (GEMM) operation. Therefore, an efficient implementation of GEMM
-is crutial to the acceleration.
+pictures. A näive version is presented first, then several optimization possibilities are explored. This
+paper serves as a rather detailed documentation of the design and implementation process.
+
+The generator is a deep Convolutional Neural Network (CNN), in which a large part of the computation is
+done with an operation called the General Matrix Multiplication (GEMM). Therefore, an efficient implementation
+of GEMM is crutial to the acceleration. However, CNNs are normally implemented with floating-point numbers,
+which are much less efficient to handle in hardware than fixed-point numbers. If only we could carry out
+the computation in fixed-point numbers and then convert the result back to floating-point numbers! Such
+techniques do exist and they are referred to as quantization, which is the key to realize high performance
+in hardware.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

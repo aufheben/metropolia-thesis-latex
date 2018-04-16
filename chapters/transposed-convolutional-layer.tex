@@ -1,0 +1,58 @@
+% Project Specifications
+
+\chapter{Transposed Convolutional Layer}
+
+In CNNs, convolutional layer extracts various features from the input, essentially performing a downsampling
+operation. Transposed convolutional layer, also known as fractionally strided convolutional layers, or sometime
+erroneously as deconvolutional layer, on the other hand performs upsampling on the input. Normally unsampling
+is often done with interpolation, but transposed convolution offers a novel approach. Conceptually,
+if we run a convolution of stride $f$ backwards, it can be seen as convolution with stride $1/f$, hence the
+name fractionally strided convolution.
+
+To understand its operation, let us work though a numerical example. We begin with regular convolution
+with an input of $4x4$ matrix $A$:
+
+$$
+\begin{matrix}
+1 & 2 & 3 & 4 \\
+4 & 3 & 2 & 1 \\
+1 & 2 & 3 & 4 \\
+4 & 3 & 2 & 1
+\end{matrix}
+$$
+
+Let the kernel be a $2x2$ matrix $K$:
+
+$$
+\begin{matrix}
+1 & 2 \\
+3 & 4
+\end{matrix}
+$$
+
+The convolution operates with padding of $1$ and stride of $2$, that is, we slide $K$ across the zero-padded
+matrix $B$ as follows with a step of $2$:
+
+$$
+\begin{matrix}
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 2 & 3 & 4 & 0 \\
+0 & 4 & 3 & 2 & 1 & 0 \\
+0 & 1 & 2 & 3 & 4 & 0 \\
+0 & 4 & 3 & 2 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0
+\end{matrix}
+$$
+
+If we view $K$ and the corresponding elements in $B$ as vectors, at each step, a dot product is computed
+between them and stored as an element in the result matrix $C$:
+
+$$
+\begin{matrix}
+4 & 8 & 12 \\
+12 & 25 & 13 \\
+8 & 7 & 1
+\end{matrix}
+$$
+
+\clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

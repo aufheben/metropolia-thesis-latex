@@ -113,7 +113,7 @@ C'^\intercal =
 \end{matrix}
 $$
 
-Then the convolution can be represented as a sparse matrix $M$ of $9 \times 36$ with entries from $K$,
+Then the convolution can be represented as a sparse matrix $M$ of $9 \times 36$ with entries from kernel $K$,
 one patch per row:
 
 $$
@@ -125,6 +125,12 @@ M =
 \end{matrix}
 $$
 
-This convolution example maps an input of $4 \times 4$ to an output of $3 \times 3$. 
+$M$ takes $B'$ as input and produces $C'$ as output, which again can be reshaped to $C$. Under this view of
+"convolution represented as kernel-defined sparse matrix", it is very easy to derive the reverse pass.
+This example convolution maps an input of $4 \times 4$ to an output of $3 \times 3$, to reverse the
+direction of input and output, namely, to take an input of $3 \times 3$ and produce an output of $4 \times 4$,
+all it takes is to tranpose $M$ to obtain $M^\intercal$ of $36 \times 9$. When $M^\intercal$ is applied to
+the an $3 \times 3$ input unrolled to $9 \times 1$, the resulting $36 \times 1$ matrix is then reshaped to
+the desired $4 \times 4$ output.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

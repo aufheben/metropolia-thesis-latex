@@ -92,20 +92,22 @@ Finally we "reshape" this matrix to the desired $3 \times 3$ output which is $C$
 Recall that the precedure described above is how regular convolution would be implemented in practice.
 On the other hand, there exists an alternative view of the convolution, also performed with a single
 matrix multiplication. This alternative view is impractical for implementation as well, but from which
-we can easily reverse the input and output. To see this, first unroll the zero-padded input $B$ and the output
-$C$ into vectors:
+we can easily reverse the input and output. To see this, first unroll the zero-padded input $B$ into
+a $36 \times 1$ matrix:
 
 \setcounter{MaxMatrixCols}{20}
 
 $$
-B' =
+B'^\intercal =
 \begin{matrix}
-  0 & \dots & 1 & 2 & 3 & 4 & 0 & \dots & 0 & 4 & 3 & 2 & 1 & \dots & 0
+  0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 0 & 0 & 4 & \dots
 \end{matrix}
 $$
 
+The output $C$ is also unrolled into a $9 \times 1$ matrix:
+
 $$
-C' =
+C'^\intercal =
 \begin{matrix}
   4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1
 \end{matrix}
@@ -117,8 +119,8 @@ one patch per row:
 $$
 M =
 \begin{matrix}
-  1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & 0 & \dots \\
-  0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & \dots \\
+  1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & 0 & 0 & \dots \\
+  0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & \dots \\
   \vdots \\
 \end{matrix}
 $$

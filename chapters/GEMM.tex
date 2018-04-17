@@ -1,0 +1,25 @@
+% Project Specifications
+
+\chapter{General Matrix Multiplication (GEMM)}
+
+The previous chapter discussed about different ways to view the convolution operation and its cousin,
+the tranposed convolution, both conceptually and implementationally. When it comes down to implementation,
+we have seen that both operations can be implemented with a single matrix multiplication. In other words,
+matrix multiplication is the main computational burden of these operations, meanwhile, real world applications
+often involve very large matrices. Therefore, as a low-level operation, the implemention of matrix
+multiplication is often heavily optimized. General matrix multiplication (GEMM) is considered as the
+\textit{de facto} standard operation contained in the Basic Linear Algebra Subprograms (BLAS)
+specification.
+
+GEMM is defined as
+
+$$C \leftarrow \alpha A B + \beta C$$
+
+In our particualr case for transposed convolution, $\alpha = 1$ and $\beta = 1$, so GEMM reduces to
+
+$$C \leftarrow A B + C$$,
+
+where C is the bias matrix to be added to the product $A B$.
+
+
+\clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

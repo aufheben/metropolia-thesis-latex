@@ -1,0 +1,20 @@
+% Project Specifications
+
+\chapter{Quantization}
+
+Machine learning programs normally represent numbers as floating-point. Although floating-point numbers
+have limited precision and can sometimes lead to numerical instability when the numbers involved get too
+small or too large, they are intuitive and easy to work with. But floating-point arithmetic can be very
+expensive to implement in hardware. Modern FPGAs contain dedicated DSP unit, some of which natively
+support floating-point, other require special Intellectual Property (IP) cores to implement the relavent
+circuitry. FPGA's processing power mainly shines on fixed-point. In order to run our model in fixed-point
+on FPGA, it is necessary to convert the model into fixed-point representation, through a process known as
+quantization. When the result is computed by FPGA, it is then converted back to floating-point, which is
+naturally called dequantization.
+
+There exist many different quantization methods. In this project, we have adopted the quantization scheme
+implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point.
+
+To describe the quantization scheme, we begin by 
+
+\clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

@@ -10,7 +10,7 @@ if we run a convolution of stride $f$ backwards, it can be seen as convolution w
 name fractionally strided convolution.
 
 To understand its operation, let us work though a numerical example. We begin with regular convolution
-with an input of $4x4$ matrix $A$:
+with an input of $4 \times 4$ matrix $A$:
 
 $$
 \begin{matrix}
@@ -88,7 +88,7 @@ $$
 \end{matrix}
 $$
 
-Finally we "reshape" this matrix to the desired $3x3$ output which is $C$ using the operation $col2im$.
+Finally we "reshape" this matrix to the desired $3 \times 3$ output which is $C$ using the operation $col2im$.
 Recall that the precedure described above is how regular convolution would be implemented in practice.
 On the other hand, there exists an alternative view of the convolution, also performed with a single
 matrix multiplication. This alternative view is impractical for implementation as well, but from which
@@ -123,6 +123,6 @@ M =
 \end{matrix}
 $$
 
-This convolution example maps an input of $4x4$ to an output of $3x3$. 
+This convolution example maps an input of $4 \times 4$ to an output of $3 \times 3$. 
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

@@ -14,10 +14,10 @@ with an input of $4x4$ matrix $A$:
 
 $$
 \begin{matrix}
-1 & 2 & 3 & 4 \\
-4 & 3 & 2 & 1 \\
-1 & 2 & 3 & 4 \\
-4 & 3 & 2 & 1
+  1 & 2 & 3 & 4 \\
+  4 & 3 & 2 & 1 \\
+  1 & 2 & 3 & 4 \\
+  4 & 3 & 2 & 1
 \end{matrix}
 $$
 
@@ -25,34 +25,102 @@ Let the kernel be a $2x2$ matrix $K$:
 
 $$
 \begin{matrix}
-1 & 2 \\
-3 & 4
+  1 & 2 \\
+  3 & 4
 \end{matrix}
 $$
 
-The convolution operates with padding of $1$ and stride of $2$, that is, we slide $K$ across the zero-padded
-matrix $B$ as follows with a step of $2$:
+Assume the convolution operates with padding of $1$ and stride of $2$, that is, we slide $K$ across the
+zero-padded matrix $B$ with a step of $2$. $B$ is shown below:
 
 $$
 \begin{matrix}
-0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 1 & 2 & 3 & 4 & 0 \\
-0 & 4 & 3 & 2 & 1 & 0 \\
-0 & 1 & 2 & 3 & 4 & 0 \\
-0 & 4 & 3 & 2 & 1 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0
+  0 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 1 & 2 & 3 & 4 & 0 \\
+  0 & 4 & 3 & 2 & 1 & 0 \\
+  0 & 1 & 2 & 3 & 4 & 0 \\
+  0 & 4 & 3 & 2 & 1 & 0 \\
+  0 & 0 & 0 & 0 & 0 & 0
 \end{matrix}
 $$
 
-If we view $K$ and the corresponding elements in $B$ as vectors, at each step, a dot product is computed
-between them and stored as an element in the result matrix $C$:
+When $K$ is slided across $B$, the overlapping entries in $B$ is called a \textit{patch}. If we view $K$ and
+the corresponding patch in $B$ as vectors, at each step, a dot product is computed between them and stored as
+an element in the result matrix $C$:
 
 $$
 \begin{matrix}
-4 & 8 & 12 \\
-12 & 25 & 13 \\
-8 & 7 & 1
+  4 & 8 & 12 \\
+  12 & 25 & 13 \\
+  8 & 7 & 1
 \end{matrix}
 $$
+
+In practice, the sliding-window approach is inefficient for implementation. All practical implementations
+use a pair of operations called $im2col$ and $col2im$ to wrap a single matrix multiplication. Since
+matrix multiplication is such a fundamental operation that its algorithm has been highly optimized over the
+decades. To start, flatten $K$ into a row vector $K_row$:
+
+$$
+\begin{matrix}
+  1 & 2 & 3 & 4 \\
+\end{matrix}
+$$
+
+For each patch in $B$ that $K$ convolves with, the entries in that patch are unrolled into a matrix $B_col$
+made of column vectors:
+
+$$
+\begin{matrix}
+  0 & 0 & 0 & 0 & 3 & 1 & 0 & 3 & 1 \\
+  0 & 0 & 0 & 4 & 2 & 0 & 4 & 2 & 0 \\
+  0 & 2 & 4 & 0 & 2 & 4 & 0 & 0 & 0 \\
+  1 & 3 & 0 & 1 & 3 & 0 & 0 & 0 & 0
+\end{matrix}
+$$
+
+This operation is called $im2col$, namely, image to columns. Now, compute the product $K_rows * B_col$, we
+obtain a $1x9$ matrix:
+
+$$
+\begin{matrix}
+  4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1
+\end{matrix}
+$$
+
+Finally we "reshape" this matrix to the desired $3x3$ output which is $C$ using the operation $col2im$.
+Recall that the precedure described above is how regular convolution would be implemented in practice.
+On the other hand, there exists an alternative view of the convolution, also performed with a single
+matrix multiplication. This alternative view is impractical for implementation as well, but from which
+we can easily reverse the input and output. To see this, first unroll the zero-padded input $B$ and the output
+$C$ into vectors:
+
+$$
+B' =
+\begin{matrix}
+  0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 0 & \dots & 0 & 4 & 3 & 2 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\end{matrix}
+$$
+
+$$
+C' =
+\begin{matrix}
+  4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1 \\
+\end{matrix}
+$$
+
+Then the convolution can be represented as a sparse matrix $M$ with entries from $K$, one patch per row:
+
+$$
+M =
+\begin{matrix}
+  1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & \dots \\
+  \vdots \\
+  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4
+\end{matrix}
+$$
+
+This convolution example maps an input of $4x4$ to an output of $3x3$. 
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

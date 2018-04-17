@@ -98,18 +98,19 @@ $C$ into vectors:
 $$
 B' =
 \begin{matrix}
-  0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 0 & \dots & 0 & 4 & 3 & 2 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 0 & \dots & 0 & 4 & 3 & 2 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0
 \end{matrix}
 $$
 
 $$
 C' =
 \begin{matrix}
-  4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1 \\
+  4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1
 \end{matrix}
 $$
 
-Then the convolution can be represented as a sparse matrix $M$ with entries from $K$, one patch per row:
+Then the convolution can be represented as a sparse matrix $M$ of $9x36$ with entries from $K$, one patch
+per row:
 
 $$
 M =

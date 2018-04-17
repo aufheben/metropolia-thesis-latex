@@ -111,16 +111,15 @@ C' =
 \end{matrix}
 $$
 
-Then the convolution can be represented as a sparse matrix $M$ of $9x36$ with entries from $K$, one patch
+Then the convolution can be represented as a sparse matrix $M$ of $9\times36$ with entries from $K$, one patch
 per row:
 
 $$
 M =
 \begin{matrix}
-  1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 \dots \\
-  0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & \dots \\
+  1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & 0 & \dots \\
+  0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & \dots \\
   \vdots \\
-  0 & \dots & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4
 \end{matrix}
 $$
 

@@ -59,7 +59,7 @@ $$
 In practice, the sliding-window approach is inefficient for implementation. All practical implementations
 use a pair of operations called $im2col$ and $col2im$ to wrap a single matrix multiplication. Since
 matrix multiplication is such a fundamental operation that its algorithm has been highly optimized over the
-decades. To start, flatten $K$ into a row vector $K_row$:
+decades. To start, flatten $K$ into a row vector $K_{row}$:
 
 $$
 \begin{matrix}
@@ -67,7 +67,7 @@ $$
 \end{matrix}
 $$
 
-For each patch in $B$ that $K$ convolves with, the entries in that patch are unrolled into a matrix $B_col$
+For each patch in $B$ that $K$ convolves with, the entries in that patch are unrolled into a matrix $B_{col}$
 made of column vectors:
 
 $$
@@ -79,7 +79,7 @@ $$
 \end{matrix}
 $$
 
-This operation is called $im2col$, namely, image to columns. Now, compute the product $K_rows * B_col$, we
+This operation is called $im2col$, namely, image to columns. Now, compute the product $K_{row} * B_{col}$, we
 obtain a $1x9$ matrix:
 
 $$
@@ -98,7 +98,7 @@ $C$ into vectors:
 $$
 B' =
 \begin{matrix}
-  0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 0 & \dots & 0 & 4 & 3 & 2 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+  0 & \dots & 1 & 2 & 3 & 4 & 0 & \dots & 0 & 4 & 3 & 2 & 1 & \dots & 0
 \end{matrix}
 $$
 
@@ -115,10 +115,10 @@ per row:
 $$
 M =
 \begin{matrix}
-  1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+  1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 \dots \\
   0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & \dots \\
   \vdots \\
-  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4
+  0 & \dots & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4
 \end{matrix}
 $$
 

@@ -44,8 +44,9 @@ quantization mapping is done with
 \end{equation}
 
 Let $A$, $B$ be matrices of real numbers and $A B = C$, the corresponding quantization parameters for $A$,
-$B$ and $C$ are $S_A$ and $Z_A$, $S_B$ and $Z_B$, $S_C$ and $Z_C$. Let $p$, $q$, $r$ be the entries in the
-quantized version of $A$, $B$ and $C$. We have everything at hand to derive the quantization scheme.
+$B$ and $C$ are $S_A$ and $Z_A$, $S_B$ and $Z_B$, $S_C$ and $Z_C$. Note that these parameters are
+predetermined. Let $p$, $q$, $r$ be the entries in the quantized version of $A$, $B$ and $C$. We have
+everything at hand to derive the quantization scheme.
 
 For an entry $f_C$ in $C$, $f_C = \sum_{i}^{} A_i B_i$, where $i$ is the index of entries in a particular
 row in $A$ and corresponding column in $B$,
@@ -67,5 +68,19 @@ $\mathfrak{K}$. We have
       & = \frac{S_A S_B}{S_C} \mathfrak{K} + Z_C
 \end{split}
 \end{equation}
+
+Therefore, once $\mathfrak{K}$ is computed, we can simply multiply it by a constant multiplier
+$M = \frac{S_A S_B}{S_C}$, then add the zero offset $Z_C$ to obtain the quantized value $r_C$. The computation
+of $\mathfrak{K}$ might seem problematic at first: it contains a subtraction operation for each entry,
+which would bring extra overhead to the GEMM computation. Let us expand this expression:
+
+\begin{equation}
+\begin{split}
+  \mathfrak{K} & = \sum_{i}^{} (p_i - Z_A) (q_i - Z_B) \\
+               & = \sum_{i}^{} (p_i q_i - Z_B p_i - Z_A q_i + Z_A Z_B) \\
+               & = \sum_{i}^{} p_i q_i - Z_B \sum_{i]^{} p_i - Z_A \sum_{i}^{} q_i + \sum{i} Z_A Z_B
+\end{split}
+\end{equation}
+
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

@@ -1,7 +1,36 @@
 % Project Specifications
 
-\chapter{Project Specifications}
+\chapter{Hardware Architecture}
 
-Check Final Year Project Guide for the content of Project Specifications chapter.
+Our development platform is Nexys 4 from Digilent with an Artix-7 FPGA chip from Xilinx.
+
+\section{Hardware Resources}
+
+Table \ref{table:hardware_resources} summarizes the hardware resources available on the Nexy 4 board.
+
+% [h] means here, can use [h!] to override internal LaTeX parameters
+\begin{table}[h]
+  \centering
+  \caption{Nexys 4 Resource Specifications}
+  \begin{tabular}{lr}
+    Logic Slices & 15850 \\
+    Block RAM & 4860 Kbits \\
+    DSP Slices & 240 \\
+    Cellular RAM & 16MB \\
+    Quad-SPI Flash & 16MB
+  \end{tabular}
+  \label{table:hardware_resources}
+\end{table}
+
+\section{Calculate Memory Requirement}
+
+Block RAM (BRAM) will be the main active memory for input, output, weight, and bias data. The FPGA chip in use
+contains 4860 Kbits of BRAM, which is 607.5KB. The original model size is around 13.7MB, which is
+considered very compact when compared with other deep learning models but still very demanding for
+our system. Once quantized, the model size is roughly 3.5MB. So it is not possible to fit the entire model
+into the BRAM and it is inevitable to interact with external storage devices, e.g., the 16MB Quad-SPI Flash
+or the 16MB PSRAM on the Nexys 4 board. It is natural to compute the model in a layer-by-layer fashion: read
+the weights and biases of a transposed convolutional layer from the external storage device and compute the
+layer, followed by one or more auxiliary layers such as batch normalization or activation layer.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

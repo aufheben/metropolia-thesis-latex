@@ -3,9 +3,9 @@
 \chapter{Introduction}
 
 Specialized hardware for running deep learning algorithms seems to be a natural step in the evolution of
-Artificial Intelligence.  Google, for exmaple, developed its own ASIC named Tensor Processing Unit (TPU)
-to accelerate tensor computations. The formidable cost of such endeavors limits ASIC development to the big
-players in the industry. For tech startups and hobbists, the Field Programmable Gate Array (FPGA) comes to
+Artificial Intelligence.  Google, for exmaple, developed its own \gls{asic} named Tensor Processing Unit (TPU)
+to accelerate tensor computations. The formidable cost of such endeavors limits \gls{asic} development to
+the big players in the industry. For tech startups and hobbists, the \gls{fpga} comes to
 rescue by filling the gap between high-cost custimzed ICs and the need to make specialized hardware for certain
 applications.
 
@@ -23,8 +23,8 @@ possiblities by implementing a pre-trained generator model of GANs on the FPGA b
 pictures. A näive version is presented first, then several optimization possibilities are explored. This
 paper serves as a rather detailed documentation of the design and implementation process.
 
-The generator is a deep Convolutional Neural Network (CNN). In such networks a large part of the computation is
-done with an operation called the General Matrix Multiplication (GEMM). Therefore, an efficient implementation
+The generator is a deep \gls{cnn}. In such networks a large part of the computation is
+done with an operation called the \gls{gemm}. Therefore, an efficient implementation
 of GEMM is crutial to the acceleration. However, CNNs are normally implemented with floating-point numbers,
 which are much less efficient to handle in hardware than fixed-point numbers. If only we could carry out
 the computation in fixed-point numbers and then convert the result back to floating-point numbers! Such

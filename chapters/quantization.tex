@@ -6,7 +6,7 @@ Machine learning programs normally represent numbers as floating-point. Although
 have limited precision and can sometimes lead to numerical instability when the numbers involved get too
 small or too large, they are intuitive and easy to work with. But floating-point arithmetic can be very
 expensive to implement in hardware. Modern FPGAs contain dedicated DSP unit, some of which natively
-support floating-point, other require special Intellectual Property (IP) cores to implement the relavent
+support floating-point, other require special Intellectual Property (IP) cores to implement the relevant
 circuitry. FPGA's processing power mainly shines on fixed-point. In order to run our model in fixed-point
 on FPGA, it is necessary to convert the model into fixed-point representation, through a process known as
 quantization. When the result is computed by FPGA, it is then converted back to floating-point, which is

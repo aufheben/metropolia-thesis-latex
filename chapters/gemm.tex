@@ -3,10 +3,10 @@
 \chapter{General Matrix Multiplication (GEMM)}
 
 The previous chapter discussed about different ways to view the convolution operation and its cousin,
-the tranposed convolution, both conceptually and implementationally. When it comes down to implementation,
+the transposed convolution, both conceptually and implementationally. When it comes down to implementation,
 we have seen that both operations can be implemented with a single matrix multiplication. In other words,
 matrix multiplication is the main computational burden of these operations, meanwhile, real world applications
-often involve very large matrices. Therefore, as a low-level operation, the implemention of matrix
+often involve very large matrices. Therefore, as a low-level operation, the implementation of matrix
 multiplication is often heavily optimized. General matrix multiplication (GEMM) is considered as the
 \textit{de facto} standard operation contained in the Basic Linear Algebra Subprograms (BLAS)
 specification.
@@ -15,7 +15,7 @@ GEMM is defined as
 
 $$C \leftarrow \alpha op(A) op(B) + \beta C,$$
 
-where $\alpha, \beta \in \mathbb{R}$, $op(X)$ is either $X$ or $X^\intercal$. In our particualr case for transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so GEMM reduces to
+where $\alpha, \beta \in \mathbb{R}$, $op(X)$ is either $X$ or $X^\intercal$. In our particular case for transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so GEMM reduces to
 
 $$C \leftarrow A B + C$$
 

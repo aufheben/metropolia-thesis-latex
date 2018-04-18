@@ -131,7 +131,7 @@ $M$ takes $B'$ as input and produces $C'$ as output, which again can be reshaped
 "convolution represented as kernel-defined sparse matrix", it is very easy to derive the
 \textit{backward pass}.  This example convolution maps an input of $4 \times 4$ to an output of $3 \times 3$,
 to reverse the direction of input and output, namely, to take an input of $3 \times 3$ and produce an output
-of $4 \times 4$, all it takes is to tranpose $M$ to obtain $M^\intercal$ of $36 \times 9$. When $M^\intercal$
+of $4 \times 4$, all it takes is to transpose $M$ to obtain $M^\intercal$ of $36 \times 9$. When $M^\intercal$
 is applied to the an $3 \times 3$ input unrolled to $9 \times 1$, the resulting $36 \times 1$ matrix is then
 reshaped to the desired $4 \times 4$ output. Hence the name \textit{transposed convolution}.
 

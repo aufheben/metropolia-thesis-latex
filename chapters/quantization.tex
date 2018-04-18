@@ -30,25 +30,43 @@ scaling factor, and $B \in \mathbb{R}$ is a constant shift. Notice the mapping i
 modify the mapping a bit so that the real value $0$ is exactly representable:
 
 \begin{equation}
- f = S(q - Z),
+  f = S(q - Z),
+  \label(dequantization_scheme)
 \end{equation}
 
 where $Z \in \mathbb{N}$ is a constant shift applied to $q$. Recall that convolution and transposed convolution
 both can involve zero-padding, having an exact representation of $0$ avoids the accumulation of errors
 (essentially a form of bias). With this form of affine mapping, $0$ is trivially mapped to $q = Z$. We call
-$S$ and $Z$ the quantization parameters of this mapping.
+$S$ and $Z$ the quantization parameters of this mapping. From \ref{dequantization_scheme}, it is clear the
+quantization mapping is done with
+
+\begin{equation}
+  q = \frac{f}{S} + Z
+  \label(quantization_scheme)
+\end{equation}
 
 Let $A$, $B$ be matrices of real numbers and $A B = C$, the corresponding quantization parameters for $A$,
-$B$ and $C$ are $S_A$ and $Z_A$, $S_B$ and $Z_B$, $S_C$ and $Z_C$. Let $p$, $q$ be the entries in the
-quantized version of $A$ and $B$. We have everything at hand to derive the quantization scheme.
+$B$ and $C$ are $S_A$ and $Z_A$, $S_B$ and $Z_B$, $S_C$ and $Z_C$. Let $p$, $q$, $r$ be the entries in the
+quantized version of $A$, $B$ and $C$. We have everything at hand to derive the quantization scheme.
 
-For $f_c \in C$, $f_c = \sum_{i}^{} A_i B_i$, where $i$ is the index of entries in a particular row in $A$
-and corresponding column in $B$,
+For an entry $f_C$ in $C$, $f_C = \sum_{i}^{} A_i B_i$, where $i$ is the index of entries in a particular
+row in $A$ and corresponding column in $B$,
 
 \begin{equation}
 \begin{split}
-  f_c & = \sum_{i}^{} A_i B_i \\
-      & = \sum_{i}^{} S_A (p_i - Z_A) S_B (q_i - Z_A)
+  f_C & = \sum_{i}^{} A_i B_i \\
+      & = \sum_{i}^{} S_A (p_i - Z_A) S_B (q_i - Z_A) \\
+      & = S_A S_B \sum_{i}^{} (p_i - Z_A) (q_i - Z_B)
+\end{split}
+\end{equation}
+
+Clearly the term $\sum_{i}^{} (p_i - Z_A) (q_i - Z_B)$ is the computational core here, let it be
+$\mathscr{A}$. We have
+
+\begin{equation}
+\begin{split}
+  r_C & = \frac{f_C}{S_C} + Z_C \\
+      & = \frac{S_A S_B}^{S_C} \mathscr{A} + Z_C
 \end{split}
 \end{equation}
 

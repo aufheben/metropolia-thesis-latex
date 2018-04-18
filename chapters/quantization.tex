@@ -12,9 +12,34 @@ on FPGA, it is necessary to convert the model into fixed-point representation, t
 quantization. When the result is computed by FPGA, it is then converted back to floating-point, which is
 naturally called dequantization.
 
+One could imagined that quantization would cause a tremendous loss to model precision, for example, when
+32-bit floating-point numbers are converted to 8-bit unsigned integers. However one of the peculiar
+properties of neural networks is that they are very resilient to noise. Of course this is also one of the
+reasons why they so successful in real world applications. We could view the internal precision loss of
+quantization as a form of internal noise, it turned out that the precision loss incurred is rather small.
+
 There exist many different quantization methods. In this project, we have adopted the quantization scheme
-implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point.
+implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point. The
+original 32-bit single-precision weights represented in $float$ are mapped to $uint8_t$. GEMM is then
+carried out on the FPGA board with these 8-bit integers. Eventually the final output of the model is
+converted back to $float$.
 
-To describe the quantization scheme, we begin by 
+To describe the quantization scheme, we begin by defining a real number $f$ as the result of an affine
+mapping $f = S q + B$, where $q$ is the corresponding quantized integer, $S \in \mathbb{R}$ is a constant
+scaling factor, and $B \in \mathbb{R}$ is a constant shift. Notice the mapping is linear. Now, we need to
+modify the mapping a bit so that the real value $0$ is exactly representable:
 
+\begin{equation}
+ $$f = S(q - Z),$$
+\end{equation}
+
+where $Z \in \mathbb{N}$ is a constant shift applied to $q$. Recall that convolution and transposed convolution
+both can involve zero-padding, having an exact representation of $0$ avoids the accumulation of errors
+(essentially a form of bias). With this form of affine mapping, $0$ is trivially mapped to $q = Z$. We call
+$S$ and $Z$ the quantization parameters of this mapping.
+
+Let $A$, $B$ be matrices of real numbers and $A B = C$, let $S_A$, $Z_A$, $S_B$, $Z_B$ be the corresponding quantization parameters for $A$ and $B$, let $S_C$, $Z_C$ be the quantization parameters for $C$. We have
+everything at hand to derive the quantization scheme.
+
+For $f_i \in C$, $f_i = \sum{i} A_i B_i$.
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

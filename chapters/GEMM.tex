@@ -15,7 +15,7 @@ GEMM is defined as
 
 $$C \leftarrow \alpha op(A) op(B) + \beta C,$$
 
-where $\alpha, \beta \in \R$, $op(X)$ is either $X$ or $X^\intercal$. In our particualr case for transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so GEMM reduces to
+where $\alpha, \beta \in \mathbb{R}$, $op(X)$ is either $X$ or $X^\intercal$. In our particualr case for transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so GEMM reduces to
 
 $$C \leftarrow A B + C$$
 

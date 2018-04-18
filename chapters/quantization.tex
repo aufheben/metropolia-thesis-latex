@@ -53,13 +53,13 @@ row in $A$ and corresponding column in $B$,
 
 \begin{equation}
 \begin{split}
-  f_C & = \sum_{i}^{} A_i B_i \\
-      & = \sum_{i}^{} S_A (p_i - Z_A) S_B (q_i - Z_A) \\
-      & = S_A S_B \sum_{i}^{} (p_i - Z_A) (q_i - Z_B)
+  f_C & = \sum_{i} A_i B_i \\
+      & = \sum_{i} S_A (p_i - Z_A) S_B (q_i - Z_A) \\
+      & = S_A S_B \sum_{i} (p_i - Z_A) (q_i - Z_B)
 \end{split}
 \end{equation}
 
-Clearly the term $\sum_{i}^{} (p_i - Z_A) (q_i - Z_B)$ is the computational core here, let it be
+Clearly the term $\sum_{i} (p_i - Z_A) (q_i - Z_B)$ is the computational core here, let it be
 $\mathfrak{K}$. We have
 
 \begin{equation}
@@ -76,9 +76,9 @@ which would bring extra overhead to the GEMM computation. Let us expand this exp
 
 \begin{equation}
 \begin{split}
-  \mathfrak{K} & = \sum_{i}^{} (p_i - Z_A) (q_i - Z_B) \\
-               & = \sum_{i}^{} (p_i q_i - Z_B p_i - Z_A q_i + Z_A Z_B) \\
-               & = \sum_{i}^{} p_i q_i - Z_B \sum_{i}^{} p_i - Z_A \sum_{i}^{} q_i + \sum_{i} Z_A Z_B
+  \mathfrak{K} & = \sum_{i} (p_i - Z_A) (q_i - Z_B) \\
+               & = \sum_{i} (p_i q_i - Z_B p_i - Z_A q_i + Z_A Z_B) \\
+               & = \sum_{i} p_i q_i - Z_B \sum_{i} p_i - Z_A \sum_{i} q_i + \sum_{i} Z_A Z_B
 \end{split}
 \end{equation}
 

@@ -73,7 +73,6 @@ reg [INOUT_WH_WIDTH-1:0] w_col, w_col_next;
 // DSP48 Macro reference says: "When the specified value (of P port)
 // is less than the full precision width, the output is truncated,
 // that is, the **LSBs** are removed."
-//
 // This is why we need to take the full precision P and truncate it
 // down to INOUT_WH_WIDTH
 wire signed [INOUT_WH_WIDTH-1:0] h_im, w_im;
@@ -103,7 +102,6 @@ begin
             w_offset <= 0;
             h_col <= 0;
             w_col <= 0;
-            // no need to reset done_tick (see debounce.v, for example)
         end
     else
         begin
@@ -214,7 +212,6 @@ begin
     h_col_next = h_col;
     w_col_next = w_col;
 
-    // direct output signals
     c_out = 0;
     c_wr_en = 1'b0; // a tick
     done_tick = 1'b0;
@@ -227,7 +224,6 @@ begin
                 if (start_tick)
                     begin
                         state_next = loop;
-                        // No need to set a_rd_addr_next, ...
 
                         i_next = 0;
                         j_next = 0;

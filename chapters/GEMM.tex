@@ -13,13 +13,25 @@ specification.
 
 GEMM is defined as
 
-$$C \leftarrow \alpha A B + \beta C$$
+$$C \leftarrow \alpha op(A) op(B) + \beta C,$$
 
-In our particualr case for transposed convolution, $\alpha = 1$ and $\beta = 1$, so GEMM reduces to
+where $\alpha, \beta \in \R$, $op(X)$ is either $X$ or $X^\intercal$. In our particualr case for transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so GEMM reduces to
 
-$$C \leftarrow A B + C$$,
+$$C \leftarrow A B + C$$
 
 where C is the bias matrix to be added to the product $A B$.
 
+A näive implementation of GEMM in our reduced case could be as follows:
+
+\begin{code}
+  \begin{minted}{c}
+    int main(void)
+    {
+        printf("hello, world!\n");
+    }
+  \end{minted}
+  \captionof{listing}{Näive Implementation of GEMM}
+  \label{code:naivegemm}
+\end{code}
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

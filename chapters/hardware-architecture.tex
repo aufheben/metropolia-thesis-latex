@@ -33,4 +33,32 @@ or the 16MB PSRAM on the Nexys 4 board. It is natural to compute the model in a 
 the weights and biases of a transposed convolutional layer from the external storage device and compute the
 layer, followed by one or more auxiliary layers such as batch normalization or activation layer.
 
+In order to allocate BRAM properly, it is necessary to list the detailed memory requirements of each layer.
+
+\begin{table}[h]
+  \centering
+  \caption{Memory Requirement by Layers}
+  \begin{tabular}{l | l | l | l | l}
+    \toprule
+    Layer & Input & Weight & Bias & Output \\
+    \midrule
+    1 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    2 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    3 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    4 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    5 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    6 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    7 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    8 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    9 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    10 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    11 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    12 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    13 & 100(8) & 819200(8) & 512(32) & 8192(32) \\
+    14 & 100(8) & 819200(8) & 512(32) & 8192(32)
+    \bottomrule
+  \end{tabular}
+  \label{table:memory_requirements}
+\end{table}
+
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

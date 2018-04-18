@@ -29,16 +29,16 @@
   \\ \hline
   \multicolumn{2}{|p{15cm}|}{\vspace{-22pt}
   The parallel nature of FPGA makes it a promising candidate to accelerate machine learning tasks. In
-  this thesis we describe an implementation of a generative model on the FPGA with Verilog. The pre-trained
-  model is part of the popular Generative Adversarial Networks (GANs) which can create realistic images. We
-  discuss the quantization of the model from high precision floating-point representation to low precision
-  integral representation. The quantization scheme leads to an efficient implementation the General Matrix
-  Multiplication (GEMM) operation, which is at the heart of neural network computations. The implementation
-  and optimization details specific to FPGA are also described. Finally, we briefly compare FPGA, ASIC, and
-  GPU for machine learning acceleration.
-  \newline
+  this thesis we describe an implementation of a generative model on FPGA with Verilog. The pre-trained
+  model is part of the popular Generative Adversarial Networks (GANs) which can create realistic images
+  that resemble the training data. The core operation of this model is called transposed convolution which
+  essentially perform upscaling of the input. A detailed description of transposed convolution is presented.
+  We discuss the quantization of the model, a method to map network weights and biases from high precision
+  floating-point representation to low precision integral representation. The quantization scheme leads
+  to an efficient implementation the General Matrix Multiplication (GEMM) operation, which is at the heart
+  of neural network computations. The implementation and optimization details specific to FPGA are also
+  elaborated. Finally, we briefly compare FPGA, CPU, ASIC and GPU for machine learning acceleration.
 
-  beginning of second paragraph\ldots
   } \\[14cm] \hline
   Keywords & \metropoliakeywords
   \\ \hline

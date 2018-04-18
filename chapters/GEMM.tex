@@ -21,14 +21,26 @@ $$C \leftarrow A B + C$$
 
 where C is the bias matrix to be added to the product $A B$.
 
-A näive implementation of GEMM in our reduced case could be as follows:
+A subtle detail in the implementation of GEMM is the order of storage of matrix entries. There are two
+different orders to store the same matrix: row-major order or column-major order. In row-major order,
+entries of rows are stored contiguously in memory, while in column-major order, entries of columns are
+consecutive to each other in memory.
+
+A näive implementation of GEMM is shown in \ref{code:naivegemm}. Here, $lda$, $ldb$ and $ldc$ are leading
+dimension of matrix $A$, $B$ and $C$, respectively.
 
 \begin{code}
   \begin{minted}{c}
-    int main(void)
-    {
-        printf("hello, world!\n");
-    }
+  for (int i = 0; i < m; i++)
+  {
+      for (int j = 0; j < n; j++)
+      {
+          float sum = 0;
+          for (int l = 0; l < k; l++)
+            sum += a[l*lda+i] * b[l*ldb+j];
+          c[j*ldc+i] = beta * c[j*ldc+i] + alpha * sum;
+      }
+  }
   \end{minted}
   \captionof{listing}{Näive Implementation of GEMM}
   \label{code:naivegemm}

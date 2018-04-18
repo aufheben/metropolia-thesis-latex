@@ -38,8 +38,16 @@ both can involve zero-padding, having an exact representation of $0$ avoids the 
 (essentially a form of bias). With this form of affine mapping, $0$ is trivially mapped to $q = Z$. We call
 $S$ and $Z$ the quantization parameters of this mapping.
 
-Let $A$, $B$ be matrices of real numbers and $A B = C$, let $S_A$, $Z_A$, $S_B$, $Z_B$ be the corresponding quantization parameters for $A$ and $B$, let $S_C$, $Z_C$ be the quantization parameters for $C$. We have
-everything at hand to derive the quantization scheme.
+Let $A$, $B$ be matrices of real numbers and $A B = C$, the corresponding quantization parameters for $A$,
+$B$ and $C$ are $S_A$ and $Z_A$, $S_B$ and $Z_B$, $S_C$ and $Z_C$. Let $p$, $q$ be the entries in the
+quantized version of $A$ and $B$. We have everything at hand to derive the quantization scheme.
 
-For $f_c \in C$, $f_c = \sum_{i}^{} A_i B_i$.
+For $f_c \in C$, $f_c = \sum_{i}^{} A_i B_i$, where $i$ is the index of entries in a particular row in $A$
+and corresponding column in $B$,
+
+\begin{equation}
+  f_c = \sum_{i}^{} A_i B_i &
+      = \sum_{i}^{} S_A (p_i - Z_A) S_B (q_i - Z_A)
+\end{equation}
+
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

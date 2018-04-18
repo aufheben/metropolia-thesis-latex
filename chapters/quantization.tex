@@ -29,20 +29,18 @@ mapping $f = S q + B$, where $q$ is the corresponding quantized integer, $S \in 
 scaling factor, and $B \in \mathbb{R}$ is a constant shift. Notice the mapping is linear. Now, we need to
 modify the mapping a bit so that the real value $0$ is exactly representable:
 
-\begin{equation}
+\begin{equation} \label{eq:dequantization}
   f = S(q - Z),
-  \label(dequantization_scheme)
 \end{equation}
 
 where $Z \in \mathbb{N}$ is a constant shift applied to $q$. Recall that convolution and transposed convolution
 both can involve zero-padding, having an exact representation of $0$ avoids the accumulation of errors
 (essentially a form of bias). With this form of affine mapping, $0$ is trivially mapped to $q = Z$. We call
-$S$ and $Z$ the quantization parameters of this mapping. From \ref{dequantization_scheme}, it is clear the
+$S$ and $Z$ the quantization parameters of this mapping. From \ref{eq:dequantization}, it is clear the
 quantization mapping is done with
 
-\begin{equation}
+\begin{equation} \label{eq:quantization}
   q = \frac{f}{S} + Z
-  \label(quantization_scheme)
 \end{equation}
 
 Let $A$, $B$ be matrices of real numbers and $A B = C$, the corresponding quantization parameters for $A$,
@@ -61,12 +59,12 @@ row in $A$ and corresponding column in $B$,
 \end{equation}
 
 Clearly the term $\sum_{i}^{} (p_i - Z_A) (q_i - Z_B)$ is the computational core here, let it be
-$\mathscr{A}$. We have
+$\mathfrak{K}$. We have
 
 \begin{equation}
 \begin{split}
   r_C & = \frac{f_C}{S_C} + Z_C \\
-      & = \frac{S_A S_B}^{S_C} \mathscr{A} + Z_C
+      & = \frac{S_A S_B}{S_C} \mathfrak{K} + Z_C
 \end{split}
 \end{equation}
 

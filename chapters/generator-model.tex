@@ -1,6 +1,8 @@
 % Project Specifications
 
-\chapter{Transposed Convolutional Layer}
+\chapter{Generator Model}
+
+\section{Transposed Convolutional Layer}
 
 In CNNs, convolutional layer extracts various features from the input, essentially performing a downsampling
 operation. Transposed convolutional layer, also known as fractionally strided convolutional layers, or sometime
@@ -136,5 +138,13 @@ reshaped to the desired $4 \times 4$ output. Hence the name \textit{transposed c
 Notice that we use the term \textit{backward pass} instead of \textit{inverse operation}, since $M^\intercal$
 does not recover the numerical values of $B$ from $C$, it only recovers the shape of $B$. And that is why it
 is misleading to call this operation deconvolution.
+
+\section{Batch Normalization Layer}
+
+\section{Activation Layer}
+
+\subsection{ReLU Layer}
+
+\subsection{Tanh Layer}
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

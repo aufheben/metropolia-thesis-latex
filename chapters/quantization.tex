@@ -20,7 +20,7 @@ quantization as a form of internal noise, it turned out that the precision loss 
 
 There exist many different quantization methods. In this project, we have adopted the quantization scheme
 implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point. The
-original 32-bit single-precision weights represented in $float$ are mapped to $uint8_t$. GEMM is then
+original 32-bit single-precision weights represented in $float$ are mapped to $uint8\_t$. GEMM is then
 carried out on the FPGA board with these 8-bit integers. Eventually the final output of the model is
 converted back to $float$.
 
@@ -30,7 +30,7 @@ scaling factor, and $B \in \mathbb{R}$ is a constant shift. Notice the mapping i
 modify the mapping a bit so that the real value $0$ is exactly representable:
 
 \begin{equation}
- $$f = S(q - Z),$$
+ f = S(q - Z),
 \end{equation}
 
 where $Z \in \mathbb{N}$ is a constant shift applied to $q$. Recall that convolution and transposed convolution
@@ -41,5 +41,5 @@ $S$ and $Z$ the quantization parameters of this mapping.
 Let $A$, $B$ be matrices of real numbers and $A B = C$, let $S_A$, $Z_A$, $S_B$, $Z_B$ be the corresponding quantization parameters for $A$ and $B$, let $S_C$, $Z_C$ be the quantization parameters for $C$. We have
 everything at hand to derive the quantization scheme.
 
-For $f_i \in C$, $f_i = \sum{i} A_i B_i$.
+For $f_c \in C$, $f_c = \sum_{i}^{} A_i B_i$.
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

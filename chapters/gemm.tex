@@ -34,20 +34,18 @@ A näive implementation of GEMM is shown in \ref{code:naivegemm}. Here, $lda$, $
 dimension of matrix $A$, $B$ and $C$, respectively.
 
 \begin{code}
-  \begin{minted}{c}
-  for (int i = 0; i < m; i++)
-  {
-      for (int j = 0; j < n; j++)
-      {
-          float sum = 0;
-          for (int l = 0; l < k; l++)
-            sum += a[l*lda+i] * b[l*ldb+j];
-          c[j*ldc+i] = beta * c[j*ldc+i] + alpha * sum;
-      }
-  }
-  \end{minted}
-  \captionof{listing}{Näive C Implementation of GEMM}
-  \label{code:naivegemm}
+\begin{minted}{c}
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        float sum = 0;
+        for (int l = 0; l < k; l++)
+          sum += a[l*lda+i] * b[l*ldb+j];
+        c[j*ldc+i] = beta * c[j*ldc+i] + alpha * sum;
+    }
+}
+\end{minted}
+\captionof{listing}{Näive C Implementation of GEMM}
+\label{code:naivegemm}
 \end{code}
 
 This implementation is straight and not very efficient, but it will serve as the blueprint for implementing
@@ -87,32 +85,33 @@ idea: it is possible to merge GEMM and $col2im$ together and compute transposed 
 sparsely.
 
 \begin{code}
-  \begin{minted}{c}
-  int j = 0;
-  for (int c_im = 0; c_im < nOutputChannel; c_im++) {
-      for (int h_offset = 0; h_offset < kH; h_offset++) {
-          for (int w_offset = 0; w_offset < kW; w_offset++) {
-              int i = 0;
-              for (long h_col = 0; h_col < inputHeight; ++h_col) {
-                  for (long w_col = 0; w_col < inputWidth; ++w_col) {
-                      int h_im = h_col * strideH - padH + h_offset * dilationH;
-                      int w_im = w_col * strideW - padW + w_offset * dilationW;
-                      if (h_im >= 0 && h_im < outputHeight && w_im >= 0 && w_im < outputWidth) {
-                          float sum = 0;
-                          for (long l = 0; l < k; l++)
-                              sum += a[l*lda + i] * b[l*ldb + j];
-                          data_im[(c_im * outputHeight + h_im) * outputWidth + w_im] += sum;
-                      }
-                      i++;
-                  }
-              }
-              j++;
-          }
-      }
-  }
-  \end{minted}
-  \captionof{listing}{C Implementation of $transposed_convolution$}
-  \label{code:transposed_convolution}
+\begin{minted}{c}
+int j = 0;
+for (int c_im = 0; c_im < nOutputChannel; c_im++) {
+    for (int h_offset = 0; h_offset < kH; h_offset++) {
+        for (int w_offset = 0; w_offset < kW; w_offset++) {
+            int i = 0;
+            for (long h_col = 0; h_col < inputHeight; ++h_col) {
+                for (long w_col = 0; w_col < inputWidth; ++w_col) {
+                    int h_im = h_col * strideH - padH + h_offset * dilationH;
+                    int w_im = w_col * strideW - padW + w_offset * dilationW;
+                    if (h_im >= 0 && h_im < outputHeight &&
+                        w_im >= 0 && w_im < outputWidth) {
+                        float sum = 0;
+                        for (long l = 0; l < k; l++)
+                            sum += a[l*lda + i] * b[l*ldb + j];
+                        data_im[(c_im * outputHeight + h_im) * outputWidth + w_im] += sum;
+                    }
+                    i++;
+                }
+            }
+            j++;
+        }
+    }
+}
+\end{minted}
+\captionof{listing}{C Implementation of $transposed_convolution$}
+\label{code:transposed_convolution}
 \end{code}
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

@@ -103,7 +103,7 @@ Finally we "reshape" this matrix to the desired $3 \times 3$ output which is $C$
 
 \subsection{Represent Convolution as a Sparse Matrix}
 
-Recall that the precedure described above is how regular convolution would be implemented in practice.
+Recall that the procedure described above is how regular convolution would be implemented in practice.
 On the other hand, there exists an alternative view of the convolution, also performed with a single
 matrix multiplication. This alternative view is impractical for implementation, but from which
 we can easily reverse the input and output. To see this, first unroll the zero-padded input $B$ into
@@ -159,14 +159,14 @@ is misleading to call this operation deconvolution.
 Batch normalization is an operation defined as
 
 \begin{equation} \label{eq:batch_normalization}
-  y = \gamma \frac{x - \bar{x}}{\sqrt{\sigma^2(x) + {eps}}} \gamma + \beta
+  y = \gamma \frac{x - \bar{x}}{\sqrt{\sigma^2(x) + {eps}}} + \beta
 \end{equation}
 
 Here $eps$ is a small constant that adds to numerical stability. $\gamma$ and $\beta$ can be regarded
 as trained weight and bias. The output $y$ of the normalization would have a mean of zero and standard
 deviation of one. Batch normalization optimizes the training of the network, making it converge
 faster with higher learning rates. It can also improve overall accuracy of the model. It is a key ingredient
-for deep networks such as DSGANs.
+for deep networks such as DCGANs.
 
 However, this operation involves an inversed square root operation $\frac{1}{\sqrt{\sigma^2(x) + eps}}$,
 which is rather difficult to compute with fixed-point numbers. Luckily Xilinx Vivado includes an IP which
@@ -178,11 +178,11 @@ root.
 Activation function, also known as \textit{transfer function}, adds non-linearity to the network. It is often
 attached to the output of a layer, typically mapping the results to the range $(0, 1)$ or $(-1, 1)$, although
 other possibilities exist. Assume the functions maps the input to range $(0, 1)$, a value close to $0$ would
-be seen as "off" or "no", a value close to $1$ would be seen as "on" or "yes". This indicates wheather the
+be seen as "off" or "no", a value close to $1$ would be seen as "on" or "yes". This indicates whether the
 following connection should see this output as activated or not, hence the name activation function.
 
 Many different types of activation functions exist with two main categories: linear and nonlinear. A commonly
-used sigmoid (S-shaped) function is $y = \frac{1}{1 + e^(-x)}$, shown in \ref{fig:sigmoid_relu}.
+used sigmoid (S-shaped) function is $y = \frac{1}{1 + e^{-x}}$, shown in \ref{fig:sigmoid_relu}.
 
 \begin{figure}[h]
   \centering
@@ -207,7 +207,7 @@ making computation efficient. The implementation of ReLU is of course straightfo
 \subsection{Tanh Layer}
 
 The hyperbolic tangent function $tanh$ is another widely used activation function. It works similarly to the
-sigmoid functon with the additional property of being symmetrical with respect to the origin.
+sigmoid function with the additional property of being symmetrical with respect to the origin.
 
 \begin{equation} \label{eq:tanh}
   \begin{split}

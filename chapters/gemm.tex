@@ -11,7 +11,7 @@ multiplication is often heavily optimized.
 
 General matrix multiplication (GEMM) is considered as the \textit{de facto} standard operation
 contained in the Basic Linear Algebra Subprograms (BLAS) specification. It has many implementations for
-different platforms, and utilizes optimizations like vectorization (e.g. SSE), SIMD-style intructions,
+different platforms, and utilizes optimizations like vectorization (e.g. SSE), SIMD-style instructions,
 parallelism, cache-awareness, etc.
 
 
@@ -82,7 +82,7 @@ for (int j = 0; j < n; ++j) {
 Here $data\_im$ is the target image while $data\_col$ is the result of GEMM. The rest is self-explanatory.
 For transposed convolution, $data\_im$ is typically smaller than $data\_col$. This leads a key optimization
 idea: it is possible to merge GEMM and $col2im$ together and compute transposed convolution by doing GEMM
-sparsely. In doing so, $data\_col$ can be abandomed and the results will be directly placed in $data\_im$,
+sparsely. In doing so, $data\_col$ can be abandoned and the results will be directly placed in $data\_im$,
 that is, there is no need for an extra large buffer for intermediate results.
 
 \begin{code}

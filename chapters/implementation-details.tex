@@ -16,6 +16,11 @@ between software implementation and FPGA implementation.
 
 \section{Implementing the Transposed Convolutional Layer}
 
+The first step in implementing the transposed convolutional layer is to simulate the nested C loops
+described in \ref{code:transposed_convolution_in_c}. % The module is modeled as a FSM.
+
+(TODO)
+
 The DSP48 Macro IP is utilized to accomplish computations with multiplication and accumulation. The first
 block implements the operations shown in \ref{table:dsp48_0_operations}. The second block is the core MACC
 unit, and only contains $P \leftarrow A*B+P$.
@@ -60,5 +65,9 @@ therefore the result is delayed by one clock cycle.
   \caption{DSP48 Macro 0 Pipeline Configuration}
   \label{fig:dsp48_macro_0_pipeline}
 \end{figure}
+
+\section{Implementing the Batch Normalization Layer}
+\section{Implementing the ReLU Layer}
+\section{Implementing the Tanh Layer}
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

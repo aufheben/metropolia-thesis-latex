@@ -175,15 +175,14 @@ root.
 
 \section{Activation Layer}
 
-Activation layer adds non-linearity to the network.
+Activation function, also known as \textit{transfer function}, adds non-linearity to the network. It is often
+attached to the output of a layer, typically mapping the results to the range $(0, 1)$ or $(-1, 1)$, although
+other possibilities exist. Assume the functions maps the input to range $(0, 1)$, a value close to $0$ would
+be seen as "off" or "no", a value close to $1$ would be seen as "on" or "yes". This indicates wheather the
+following connection should see this output as activated or not, hence the name activation function.
 
-\subsection{ReLU Layer}
-
-ReLU is defined as
-
-\begin{equation} \label{eq:relu}
-  y = max(0, x)
-\end{equation}
+Many different types of activation functions exist with two main categories: linear and non-lear. A commonly
+used sigmoid (S-shaped) function is $y = \frac{1}{1 + e^(-x)}$, shown in \ref{fig:sigmoid_relu}.
 
 \begin{figure}[h]
   \centering
@@ -192,15 +191,29 @@ ReLU is defined as
   \label{fig:sigmoid_relu}
 \end{figure}
 
+\subsection{ReLU Layer}
+
+ReLU is very popular nowadays. It is defined as
+
+\begin{equation} \label{eq:relu}
+  y = max(0, x)
+\end{equation}
+
+When compared with the sigmoid function, the gradient of ReLU does not saturate when $x$ gets large,
+which makes SGD convergence faster. In addition, since all negative values are converted to zero, it adds
+the desirable feature of sparsity to the network, making computation efficient. The implementation of ReLU
+is of course straightforward.
+
 \subsection{Tanh Layer}
 
-The hyperbolic tangent function $tanh$ is another widely used activation function.
+The hyperbolic tangent function $tanh$ is another widely used activation function. It works similarly to the
+sigmoid functon with the additional property of being symmetrical with respect to the origin.
 
 \begin{equation} \label{eq:tanh}
   \begin{split}
-    y & = \frac{\exp{x} - \exp{-x}}{\exp{x} + \exp{-x}} \\
-      & = \frac{\exp{2x} - 1}{\exp{2x} + 1} \\
-      & = \frac{1- \exp{-2x}}{1 - \exp{-2x}}
+    y & = \frac{e^x - e^{-x}}{e^{x} + e^{-x}} \\
+      & = \frac{e^{2x} - 1}{e^{2x} + 1} \\
+      & = \frac{1- e^{-2x}}{1 - e^{-2x}}
   \end{split}
 \end{equation}
 

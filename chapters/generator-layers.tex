@@ -156,10 +156,35 @@ is misleading to call this operation deconvolution.
 
 \section{Batch Normalization Layer}
 
+Batch normalization is an operation defined as
+
+\begin{equation} \label{eq:batch_normalization}
+  y = \frac{x - \bar{x}}{\sqrt{\sigma^2 + {eps}}} \times \gamma + \beta
+\end{equation}
+
+Here $eps$ is a small constant that adds to numerical stability. $\gamma$ and $\beta$ can be regarded
+as trained weights and biases.
+
+
 \section{Activation Layer}
+
+Activation layer adds non-linearity to the network.
 
 \subsection{ReLU Layer}
 
+ReLU is defined as
+
+\begin{equation} \label{eq:relu}
+  y = max(0, x)
+\end{equation}
+
 \subsection{Tanh Layer}
+
+The hyperbolic tangent function $tanh$ is another widely used activation function.
+
+\begin{equation} \label{eq:tanh}
+  y = \frac{\exp{x} - \exp{-x}}{\exp{x} + \exp{-x}}
+\end{equation}
+
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

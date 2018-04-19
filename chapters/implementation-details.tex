@@ -2,10 +2,20 @@
 
 \chapter{Implementation Details}
 
-\section{Few Words on Development Method}
+\section{Development Environment and Method}
+
+Xilinx Vivado version 2017.04 is used as the development platform for FPGA. The typical workflow involves
+the following steps: design the functionality of module, implement the module in Verilog, add IP blocks
+if necessary, write the testbench for the module, run behavioral simulation, run synthesis and implementation,
+run post-synthesis and post-implementation simulation, view synthesis and implementation reports, and finally,
+create bitstream and test on device.
 
 A parallel C implementation is developed on Linux simultaneously to facilitate the FPGA development.
 Its main function is to provide algorithm verification, especially numerical comparison of output layers
 between software implementation and FPGA implementation.
+
+\section{Implementing the Transposed Convolutional Layer}
+
+
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

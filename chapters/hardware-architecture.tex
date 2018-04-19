@@ -2,10 +2,9 @@
 
 \chapter{Hardware Architecture}
 
-Our development platform is Nexys 4 from Digilent with an Artix-7 FPGA chip from Xilinx.
-
 \section{Hardware Resources}
 
+Our development platform is Nexys 4 from Digilent with an Artix-7 FPGA chip from Xilinx.
 Table \ref{table:hardware_resources} summarizes the hardware resources available on the Nexy 4 board.
 
 % [h] means here, can use [h!] to override internal LaTeX parameters
@@ -60,5 +59,25 @@ In order to allocate BRAM properly, it is necessary to list the detailed memory 
   \end{tabular}
   \label{table:memory_requirements}
 \end{table}
+
+In \ref{table:memory_requirements}, the numbers in parentheses are the bit width of the values. The table
+indicates the maximum input/output size is 65536 in 32-bit, the maximum weight size is 2097152 in 8-bit, the
+maximum bias size is 512 in 32-bit. However, notice that when both input is 65536 in 32-bit, the corresponding
+layers are batch normalization and ReLU. This means that the same buffer can be used to store both the
+input and output because the input can be updated in place. Consequently the input buffer only needs to
+store 65536 values in 8-bit.
+
+To conclude, four main buffers are needed: input buffer (65536 bytes), output buffer (262144 bytes),
+weight buffer (2097152 bytes), bias buffer (16384 bytes). Some auxiliary buffers are needed to store
+the quantization parameters.
+
+\section{Architecture}
+
+The system stores weights and biases in the 16MB Quad-SPI Flash. A computation unit contains a
+transposed convolution module TC, a batch normalization module BN, a ReLU module ReLU, and a tanh module
+Tanh. The unit can be configured to be TC-BN-ReLU or TC-Tanh. The network computes one layer at a time.
+The final result is sent to PC via UART (serial port).
+
+(Block diagram to be added)
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

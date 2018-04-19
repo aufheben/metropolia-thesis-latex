@@ -181,7 +181,7 @@ other possibilities exist. Assume the functions maps the input to range $(0, 1)$
 be seen as "off" or "no", a value close to $1$ would be seen as "on" or "yes". This indicates wheather the
 following connection should see this output as activated or not, hence the name activation function.
 
-Many different types of activation functions exist with two main categories: linear and non-lear. A commonly
+Many different types of activation functions exist with two main categories: linear and nonlinear. A commonly
 used sigmoid (S-shaped) function is $y = \frac{1}{1 + e^(-x)}$, shown in \ref{fig:sigmoid_relu}.
 
 \begin{figure}[h]
@@ -199,10 +199,10 @@ ReLU is very popular nowadays. It is defined as
   y = max(0, x)
 \end{equation}
 
-When compared with the sigmoid function, the gradient of ReLU does not saturate when $x$ gets large,
-which makes SGD convergence faster. In addition, since all negative values are converted to zero, it adds
-the desirable feature of sparsity to the network, making computation efficient. The implementation of ReLU
-is of course straightforward.
+The first thing to notice is that it is in fact nonlinear. When compared with the sigmoid function, the
+gradient of ReLU does not saturate when $x$ gets large, which makes SGD convergence faster. In addition,
+since all negative values are converted to zero, it adds the desirable feature of sparsity to the network,
+making computation efficient. The implementation of ReLU is of course straightforward.
 
 \subsection{Tanh Layer}
 

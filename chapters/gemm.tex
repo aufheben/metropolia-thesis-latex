@@ -101,7 +101,8 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
                         float sum = 0;
                         for (long l = 0; l < k; l++)
                             sum += a[l*lda + i] * b[l*ldb + j];
-                        int idx = (c_im * outputHeight + h_im) * outputWidth + w_im;
+                        int idx = (c_im * outputHeight + h_im) *
+                                  outputWidth + w_im;
                         data_im[idx] += sum;
                     }
                     i++;

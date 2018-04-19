@@ -79,10 +79,11 @@ for (int j = 0; j < n; ++j) {
 \label{code:col2im}
 \end{code}
 
-Here $data_im$ is the target image while $data_col$ is the result of GEMM. The rest is self-explanatory.
-For transposed convolution, $data_im$ is typically smaller than $data_col$. The leads a key optimization
+Here $data_{im}$ is the target image while $data_{col}$ is the result of GEMM. The rest is self-explanatory.
+For transposed convolution, $data_{im}$ is typically smaller than $data_{col}$. This leads a key optimization
 idea: it is possible to merge GEMM and $col2im$ together and compute transposed convolution by doing GEMM
-sparsely.
+sparsely. In doing so, $data_{col}$ can be abandomed and the results will be directly placed in $data_{im}$,
+that is, there is no need for an extra large buffer for intermediate results.
 
 \begin{code}
 \begin{minted}{c}

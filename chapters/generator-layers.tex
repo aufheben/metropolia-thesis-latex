@@ -18,22 +18,22 @@ with an input of $4 \times 4$ matrix $A$:
 
 $$
 A =
-  \begin{matrix}
+  \begin{pmatrix}
     1 & 2 & 3 & 4 \\
     4 & 3 & 2 & 1 \\
     1 & 2 & 3 & 4 \\
     4 & 3 & 2 & 1
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 Let the kernel be a $2x2$ matrix $K$:
 
 $$
 K =
-  \begin{matrix}
+  \begin{pmatrix}
     1 & 2 \\
     3 & 4
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 Assume the convolution operates with padding of $1$ and stride of $2$, that is, we slide $K$ across the
@@ -41,14 +41,14 @@ zero-padded matrix $B$ with a step of $2$. $B$ is shown below:
 
 $$
 B =
-  \begin{matrix}
+  \begin{pmatrix}
     0 & 0 & 0 & 0 & 0 & 0 \\
     0 & 1 & 2 & 3 & 4 & 0 \\
     0 & 4 & 3 & 2 & 1 & 0 \\
     0 & 1 & 2 & 3 & 4 & 0 \\
     0 & 4 & 3 & 2 & 1 & 0 \\
     0 & 0 & 0 & 0 & 0 & 0
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 When $K$ is slided across $B$, the overlapping entries in $B$ is called a \textit{patch}. If we view $K$ and
@@ -57,11 +57,11 @@ an element in the result matrix $C$:
 
 $$
 C =
-  \begin{matrix}
+  \begin{pmatrix}
     4 & 8 & 12 \\
     12 & 25 & 13 \\
     8 & 7 & 1
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 In practice, the sliding-window approach is inefficient for implementation. All practical implementations
@@ -72,9 +72,9 @@ $K_{row}$:
 
 $$
 K_{row} =
-  \begin{matrix}
+  \begin{pmatrix}
     1 & 2 & 3 & 4 \\
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 For each patch in $B$ that $K$ convolves with, the entries in that patch are unrolled into a matrix $B_{col}$
@@ -82,21 +82,21 @@ made of column vectors:
 
 $$
 B_{col} =
-  \begin{matrix}
+  \begin{pmatrix}
     0 & 0 & 0 & 0 & 3 & 1 & 0 & 3 & 1 \\
     0 & 0 & 0 & 4 & 2 & 0 & 4 & 2 & 0 \\
     0 & 2 & 4 & 0 & 2 & 4 & 0 & 0 & 0 \\
     1 & 3 & 0 & 1 & 3 & 0 & 0 & 0 & 0
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 This operation is called $im2col$, namely, image to columns. Now, compute the product $K_{row} * B_{col}$, we
 obtain a $1x9$ matrix:
 
 $$
-\begin{matrix}
+\begin{pmatrix}
   4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1
-\end{matrix}
+\end{pmatrix}
 $$
 
 Finally we "reshape" this matrix to the desired $3 \times 3$ output which is $C$ using the operation $col2im$.
@@ -113,18 +113,18 @@ a $36 \times 1$ matrix:
 
 $$
 B'^\intercal =
-  \begin{matrix}
+  \begin{pmatrix}
     0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 0 & 0 & 4 & \dots
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 The output $C$ is also unrolled into a $9 \times 1$ matrix:
 
 $$
 C'^\intercal =
-  \begin{matrix}
+  \begin{pmatrix}
     4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 Then the convolution can be represented as a sparse matrix $M$ of $9 \times 36$ with entries from kernel $K$,
@@ -132,11 +132,11 @@ one patch per row:
 
 $$
 M =
-  \begin{matrix}
+  \begin{pmatrix}
     1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & 0 & 0 & \dots \\
     0 & 0 & 1 & 2 & 0 & 0 & 0 & 0 & 3 & 4 & 0 & 0 & \dots \\
     \vdots \\
-  \end{matrix}
+  \end{pmatrix}
 $$
 
 $M$ takes $B'$ as input and produces $C'$ as output, which again can be reshaped to $C$.

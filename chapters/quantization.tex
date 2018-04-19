@@ -22,7 +22,7 @@ There exist many different quantization methods. In this project, we have adopte
 implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point. The
 original 32-bit single-precision weights represented in $float$ are mapped to $uint8\_t$. GEMM is then
 carried out on the FPGA board with these 8-bit integers. Intermediate MACC results are 32-bit
-integers to accomodate the accumulation. Eventually the final output of the model is converted back to $float$.
+integers to accommodate the accumulation. Eventually the final output of the model is converted back to $float$.
 
 To describe the quantization scheme, we begin by defining a real number $f$ as the result of an affine
 mapping $f = S q + B$, where $q$ is the corresponding quantized integer, $S \in \mathbb{R}$ is a constant

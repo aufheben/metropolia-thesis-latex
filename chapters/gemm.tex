@@ -48,8 +48,8 @@ for (int i = 0; i < m; i++) {
 \label{code:naivegemm}
 \end{code}
 
-This implementation is straight and not very efficient, but it will serve as the blueprint for implementing
-transposed convolution on FPGA.
+This implementation is straightforward and not very efficient, but it is a good starting point to guide
+us through the rest of the design.
 
 Another operation used by transposed convolution is $col2im$. It cherry picks the elements computed by GEMM
 and places them in the destination image. The code is given below:
@@ -117,4 +117,6 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
 \label{code:transposed_convolution}
 \end{code}
 
+This last C code \ref{code:transposed_convolution} serves as the blueprint for implementing
+transposed convolution on FPGA with Verilog.
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

@@ -53,17 +53,17 @@ contains a deep cascade of 152 layers.
     \midrule
     1 & TC & $100 \rightarrow 512$, $4 \times 4$ kernel\\
     2 & BN & $512$ channels\\
-    3 & ReLU & \\
-    4 & TC & $512 \rightarrow 256$, $4 \times 4$ kernel\\
-    5 & BN & \\
-    6 & ReLU & \\
-    7 & TC & $256 \rightarrow 128$, $4 \times 4$ kernel\\
-    8 & BN & \\
-    9 & ReLU & \\
-    10 & TC & $128 \rightarrow 64$, $4 \times 4$ kernel\\
-    11 & BN &\\
-    12 & ReLU & \\
-    13 & TC & $64 \rightarrow 3$, $4 \times 4$ kernel\\
+    3 & ReLU & $512$ channels \\
+    4 & TC & $512 \rightarrow 256$, $4 \times 4$ kernel, stride $2$, padding $1$ \\
+    5 & BN & $256$ channels \\
+    6 & ReLU & $256$ channels \\
+    7 & TC & $256 \rightarrow 128$, $4 \times 4$ kernel, stride $2$, padding $1$ \\
+    8 & BN & $128$ channels \\
+    9 & ReLU & $128$ channels \\
+    10 & TC & $128 \rightarrow 64$, $4 \times 4$ kernel, stride $2$, padding $1$ \\
+    11 & BN & $64$ channels \\
+    12 & ReLU & $64$ channels \\
+    13 & TC & $64 \rightarrow 3$, $4 \times 4$ kernel, stride $2$, padding $1$ \\
     14 & Tanh & final layer \\
     \bottomrule
   \end{tabular}

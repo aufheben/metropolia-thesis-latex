@@ -159,12 +159,19 @@ is misleading to call this operation deconvolution.
 Batch normalization is an operation defined as
 
 \begin{equation} \label{eq:batch_normalization}
-  y = \frac{x - \bar{x}}{\sqrt{\sigma^2 + {eps}}} \times \gamma + \beta
+  y = \gamma \frac{x - \bar{x}}{\sqrt{\sigma^2(x) + {eps}}} \gamma + \beta
 \end{equation}
 
 Here $eps$ is a small constant that adds to numerical stability. $\gamma$ and $\beta$ can be regarded
-as trained weights and biases.
+as trained weight and bias. The output $y$ of the normalization would have a mean of zero and standard
+deviation of one. Batch normalization optimizes the training of the network, making it converge
+faster with higher learning rates. It can also improve overall accuracy of the model. It is a key ingredient
+for deep networks such as DSGANs.
 
+However, this operation involves an inversed square root operation $\frac{1}{\sqrt{\sigma^2(x) + eps}}$,
+which is rather difficult to compute with fixed-point numbers. Luckily Xilinx Vivado includes an IP which
+can both convert between fixed-point and floating-point representations, as well as compute inversed square
+root.
 
 \section{Activation Layer}
 
@@ -178,13 +185,30 @@ ReLU is defined as
   y = max(0, x)
 \end{equation}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{sigmoid_relu}
+  \caption{Sigmoid vs. ReLU}
+  \label{fig:sigmoid_relu}
+\end{figure}
+
 \subsection{Tanh Layer}
 
 The hyperbolic tangent function $tanh$ is another widely used activation function.
 
 \begin{equation} \label{eq:tanh}
-  y = \frac{\exp{x} - \exp{-x}}{\exp{x} + \exp{-x}}
+  \begin{split}
+    y & = \frac{\exp{x} - \exp{-x}}{\exp{x} + \exp{-x}} \\
+      & = \frac{\exp{2x} - 1}{\exp{2x} + 1} \\
+      & = \frac{1- \exp{-2x}}{1 - \exp{-2x}}
+  \end{split}
 \end{equation}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{sigmoid_tanh}
+  \caption{Sigmoid vs. Tanh}
+  \label{fig:sigmoid_tanh}
+\end{figure}
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

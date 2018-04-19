@@ -57,26 +57,28 @@ Another operation used by transposed convolution is $col2im$. It cherry picks th
 and places them in the destination image. The code is given below:
 
 \begin{code}
-  \begin{minted}{c}
-  memset(data_im, 0, sizeof(float) * outputHeight * outputWidth * nOutputChannel);
-  const int n = nOutputChannel * kernelH * kernelW;
-  for (int j = 0; j < n; ++j) {
-      int w_offset = j % kernelW;
-      int h_offset = (j / kernelW) % kernelH;
-      int c_im = j / kernelH / kernelW;
-      for (int h_col = 0; h_col < inputHeight; ++h_col) {
-          for (int w_col = 0; w_col < inputWidth; ++w_col) {
-              int h_im = h_col * strideH - padH + h_offset * dilationH;
-              int w_im = w_col * strideW - padW + w_offset * dilationW;
-              if (h_im >= 0 && h_im < outputHeight && w_im >= 0 && w_im < outputWidth)
-                  data_im[(c_im * outputHeight + h_im) * outputWidth + w_im] +=
-                      data_col[(j * inputHeight + h_col) * inputWidth + w_col];
-          }
-      }
-  }
-  \end{minted}
-  \captionof{listing}{C Implementation of $col2im$}
-  \label{code:col2im}
+\begin{minted}{c}
+// content of data_im set to 0 already
+const int n = nOutputChannel * kernelH * kernelW;
+for (int j = 0; j < n; ++j) {
+    int w_offset = j % kernelW;
+    int h_offset = (j / kernelW) % kernelH;
+    int c_im = j / kernelH / kernelW;
+    for (int h_col = 0; h_col < inputHeight; ++h_col) {
+        for (int w_col = 0; w_col < inputWidth; ++w_col) {
+            int h_im = h_col * strideH - padH + h_offset * dilationH;
+            int w_im = w_col * strideW - padW + w_offset * dilationW;
+            if (h_im >= 0 && h_im < outputHeight &&
+                w_im >= 0 && w_im < outputWidth) {
+                data_im[(c_im * outputHeight + h_im) * outputWidth + w_im] +=
+                    data_col[(j * inputHeight + h_col) * inputWidth + w_col];
+            }
+        }
+    }
+}
+\end{minted}
+\captionof{listing}{C Implementation of $col2im$}
+\label{code:col2im}
 \end{code}
 
 Here $data_im$ is the target image while $data_col$ is the result of GEMM. The rest is self-explanatory.

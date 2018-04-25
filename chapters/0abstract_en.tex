@@ -28,16 +28,22 @@
   Instructor(s) & \metropoliainstructors
   \\ \hline
   \multicolumn{2}{|p{15cm}|}{\vspace{-22pt}
-  The parallel nature of FPGA makes it a promising candidate to accelerate machine learning tasks. In
-  this thesis we describe an implementation of a generative model on FPGA with Verilog. The pre-trained
-  model is part of the popular Generative Adversarial Networks (GANs) which can create realistic images
-  that resemble the training data. The core operation of this model is called transposed convolution which
-  essentially perform upscaling of the input. A detailed description of transposed convolution is presented.
-  We discuss the quantization of the model, a method to map network weights and biases from high precision
-  floating-point representation to low precision integral representation. The quantization scheme leads
-  to an efficient implementation the General Matrix Multiplication (GEMM) operation, which is at the heart
-  of neural network computations. The implementation and optimization details specific to FPGA are also
-  elaborated. Finally, we briefly compare FPGA, CPU, ASIC and GPU for machine learning acceleration.
+  The parallel nature of FPGA makes it a promising candidate to accelerate machine learning tasks. The
+  purpose of this project is to demonstrate the acceleration capabilities of FPGA for deep convolutional
+  neural networks. The project is carried out by implementing a generative model on the Nexys 4 trainer
+  board with an Artix-7 FPGA from Xilinx. The pre-trained model is part of the popular Generative Adversarial
+  Networks (GANs) which can create realistic images that resemble the training data. The core is written in
+  Verilog, but several IPs are also used to facilitate the design. Xilinx Vivado 2017.4 is used as the
+  development platform. \newline
+  
+  The basic design is able to generate $64 \times 64$ images at $?fps$, an encouraging result with much space
+  for optimization. This paper serves as a detailed documentation of the design and implementation process,
+  as well as optimization methods. The core operation of the generative model called transposed
+  convolution is described. A method to map network weights and biases from high precision floating-point
+  representation to low precision integral representation, known as quantization, is discussed. The
+  quantization scheme leads to an efficient implementation the General Matrix Multiplication (GEMM) operation,
+  which is at the heart of neural network computations. As a conclusion, a brief comparison is made between
+  FPGA, CPU, ASIC and GPU for machine learning acceleration.
 
   } \\[14cm] \hline
   Keywords & \metropoliakeywords

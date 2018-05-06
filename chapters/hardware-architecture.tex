@@ -60,7 +60,7 @@ In order to allocate BRAM properly, it is necessary to list the detailed memory 
   \label{table:memory_requirements}
 \end{table}
 
-In \ref{table:memory_requirements}, the numbers in parentheses are the bit width of the values. The table
+In table \ref{table:memory_requirements}, the numbers in parentheses are the bit width of the values. The table
 indicates the maximum input/output size is 65536 in 32-bit, the maximum weight size is 2097152 in 8-bit, the
 maximum bias size is 512 in 32-bit. However, notice that when both input is 65536 in 32-bit, the corresponding
 layers are batch normalization and ReLU. This means that the same buffer can be used to store both the

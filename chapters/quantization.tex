@@ -12,32 +12,32 @@ on FPGA, it is necessary to convert the model into fixed-point representation, t
 quantization. When the result is computed by FPGA, it is then converted back to floating-point, which is
 naturally called dequantization.
 
-One could imagined that quantization would cause a tremendous loss to model precision, for example, when
-32-bit floating-point numbers are converted to 8-bit unsigned integers. However one of the peculiar
+One could imagine that quantization would cause a tremendous loss to model precision, for example, when
+32-bit floating-point numbers are converted to 8-bit unsigned integers. However, one of the peculiar
 properties of neural networks is that they are very resilient to noise. Of course this is also one of the
-reasons why they so successful in real world applications. We could view the internal precision loss of
+reasons why they are so successful in real world applications. We could view the internal precision loss of
 quantization as a form of internal noise, it turned out that the precision loss incurred is rather small.
 
-There exist many different quantization methods. In this project, we have adopted the quantization scheme
+There exist many different quantization methods. This project adopted the quantization scheme
 implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point. The
 original 32-bit single-precision weights represented in $float$ are mapped to $uint8\_t$. GEMM is then
 carried out on the FPGA board with these 8-bit integers. Intermediate MACC results are 32-bit
 integers to accommodate the accumulation. Eventually the final output of the model is converted back to $float$.
 
-To describe the quantization scheme, we begin by defining a real number $f$ as the result of an affine
+Th quantization scheme can be derived with basic algebra. Define a real number $f$ as the result of an affine
 mapping $f = S q + B$, where $q$ is the corresponding quantized integer, $S \in \mathbb{R}$ is a constant
-scaling factor, and $B \in \mathbb{R}$ is a constant shift. Notice the mapping is linear. Now, we need to
-modify the mapping a bit so that the real value $0$ is exactly representable:
+scaling factor, and $B \in \mathbb{R}$ is a constant shift. Next, modify the mapping a bit so that the
+real value $0$ is exactly representable:
 
 \begin{equation} \label{eq:dequantization}
   f = S(q - Z),
 \end{equation}
 
-where $Z \in \mathbb{N}$ is a constant shift applied to $q$. Recall that convolution and transposed convolution
+where $Z \in \mathbb{N}$ is a constant shift applied to $q$. Since convolution and transposed convolution
 both can involve zero-padding, having an exact representation of $0$ avoids the accumulation of errors
-(essentially a form of bias). With this form of affine mapping, $0$ is trivially mapped to $q = Z$. We call
-$S$ and $Z$ the quantization parameters of this mapping. From \ref{eq:dequantization}, it is clear the
-quantization mapping is done with
+(essentially a form of bias). With this form of affine mapping, $0$ is trivially mapped to $q = Z$. $S$ and
+$Z$ are called the quantization parameters of this mapping. From equation \ref{eq:dequantization},
+it is clear the quantization mapping is done with
 
 \begin{equation} \label{eq:quantization}
   q = \frac{f}{S} + Z
@@ -45,8 +45,8 @@ quantization mapping is done with
 
 Let $A \in \mathbb{R}^{m \times k}$, $B \in \mathbb{R}^{k \times n}$, $A B = C \in \mathbb{R}^{m \times n}$,
 the corresponding quantization parameters for $A$, $B$ and $C$ are $S_A$ and $Z_A$, $S_B$ and $Z_B$,
-$S_C$ and $Z_C$. Note that these parameters are predetermined. Let $p$, $q$, $r$ be the entries in the
-quantized version of $A$, $B$ and $C$. We have everything at hand to derive the quantization scheme.
+$S_C$ and $Z_C$. These parameters are predetermined, since in most cases the range of numbers in these matrices
+are known. Let $p$, $q$, $r$ be the entries in the quantized version of $A$, $B$ and $C$. 
 
 For an entry $f_C$ in $C$, $f_C = \sum_{i}^{} A_i B_i$, where $i$ is the index of entries in a particular
 row in $A$ and corresponding column in $B$,

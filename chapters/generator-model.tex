@@ -174,10 +174,10 @@ Finally we "reshape" this matrix to the desired $3 \times 3$ output which is $C$
 
 \subsection{Represent Convolution as a Sparse Matrix}
 
-Recall that the procedure described above is how regular convolution would be implemented in practice.
+The procedure described in the previous section is how regular convolution would be implemented in practice.
 On the other hand, there exists an alternative view of the convolution, also performed with a single
 matrix multiplication. This alternative view is impractical for implementation, but from which
-we can easily reverse the input and output. To see this, first unroll the zero-padded input $B$ into
+input and output can be easily reversed. To see this, first unroll the zero-padded input $B$ into
 a $36 \times 1$ matrix:
 
 \setcounter{MaxMatrixCols}{20}
@@ -221,9 +221,9 @@ of $36 \times 9$. When $M^\intercal$ is applied to the an $3 \times 3$ input unr
 resulting $36 \times 1$ matrix is then reshaped to the desired $4 \times 4$ output. Hence the name
 \textit{transposed convolution}.
 
-Notice that we use the term \textit{backward pass} instead of \textit{inverse operation}, since $M^\intercal$
-does not recover the numerical values of $B$ from $C$, it only recovers the shape of $B$. And that is why it
-is misleading to call this operation deconvolution.
+It needs to be pointed out that the term \textit{backward pass} instead of \textit{inverse operation},
+since $M^\intercal$ does not recover the numerical values of $B$ from $C$, it only recovers the shape of $B$.
+And that is why it is misleading to call this operation deconvolution.
 
 \section{Batch Normalization Layer}
 

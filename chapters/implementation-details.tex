@@ -17,13 +17,13 @@ between software implementation and FPGA implementation.
 \section{Implementing the Transposed Convolutional Layer}
 
 The first step in implementing the transposed convolutional layer is to simulate the nested C loops
-described in \ref{code:transposed_convolution_in_c}. % The module is modeled as a FSM.
+described in listing \ref{code:transposed_convolution_in_c}. % The module is modeled as a FSM.
 
 (TODO)
 
 The DSP48 Macro IP is utilized to accomplish computations with multiplication and accumulation. The first
-block implements the operations shown in \ref{table:dsp48_0_operations}. The second block is the core MACC
-unit, and only contains $P \leftarrow A*B+P$.
+block implements the operations shown in table \ref{table:dsp48_0_operations}. The second block is the core
+MACC unit, and only contains $P \leftarrow A*B+P$.
 
 \begin{table}[h]
   \centering
@@ -36,7 +36,7 @@ unit, and only contains $P \leftarrow A*B+P$.
   \label{table:dsp48_0_operations}
 \end{table}
 
-The ports of both blocks are shown in \ref{fig:dsp48_macro_0} and \ref{fig:dsp48_macro_1}.
+The ports of both blocks are shown in figure \ref{fig:dsp48_macro_0} and figure \ref{fig:dsp48_macro_1}.
 
 \begin{figure}[h]
   \centering

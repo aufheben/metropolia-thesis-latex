@@ -9,35 +9,28 @@ matrix multiplication is the main computational burden of these operations, mean
 often involve very large matrices. Therefore, as a low-level operation, the implementation of matrix
 multiplication is often heavily optimized.
 
-The generator is a deep \gls{cnn}. In such networks a large part of the computation is done with an
-operation called the \gls{gemm}. Therefore, an efficient implementation of \gls{gemm} is crucial to the
-acceleration. However, CNNs are normally implemented with floating-point numbers, which are usually less
-efficient to handle in hardware than fixed-point numbers. A class of techniques called quantization can
-be used to carry out the computation in fixed-point numbers and then convert the result back to
-floating-point numbers, realizing high performance in hardware. Chapter 4 provides a detailed discussion
-of the quantization scheme used in this project.
-
-General matrix multiplication (GEMM) is considered as the \textit{de facto} standard operation
-contained in the Basic Linear Algebra Subprograms (BLAS) specification. It has many implementations for
-different platforms, and utilizes optimizations like vectorization (e.g. SSE), SIMD-style instructions,
+\gls{gemm} is considered as the \textit{de facto} standard operation
+contained in the \gls{blas} specification. It has many implementations for
+different platforms, and utilizes optimizations like \gls{simd} instructions,
 parallelism, cache-awareness, etc.
 
-GEMM is defined as
+\gls{gemm} is defined as
 
 $$C \leftarrow \alpha op(A) op(B) + \beta C,$$
 
-where $\alpha, \beta \in \mathbb{R}$, $op(X)$ is either $X$ or $X^\intercal$. In our particular case for transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so GEMM reduces to
+where $\alpha, \beta \in \mathbb{R}$, $op(X)$ is either $X$ or $X^\intercal$. In our particular case for
+transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so \gls{gemm} reduces to
 
 $$C \leftarrow A B + C$$
 
 where C is the bias matrix to be added to the product $A B$.
 
-A subtle detail in the implementation of GEMM is the order of storage of matrix entries. There are two
+A subtle detail in the implementation of \gls{gemm} is the order of storage of matrix entries. There are two
 different orders to store the same matrix: row-major order or column-major order. In row-major order,
 entries of rows are stored contiguously in memory, while in column-major order, entries of columns are
 consecutive to each other in memory.
 
-A naïve implementation of GEMM is shown in Listing \ref{code:naivegemm}. Here, $lda$, $ldb$ and $ldc$ are
+A naïve implementation of \gls{gemm} is shown in Listing \ref{code:naivegemm}. Here, $lda$, $ldb$ and $ldc$ are
 leading dimension of matrix $A$, $B$ and $C$, respectively.
 
 \begin{code}
@@ -51,15 +44,15 @@ for (int i = 0; i < m; i++) {
     }
 }
 \end{minted}
-\captionof{listing}{Näive C Implementation of GEMM}
+  \captionof{listing}{Naïve C Implementation of \gls{gemm}}
 \label{code:naivegemm}
 \end{code}
 
 This implementation is straightforward and not very efficient, but it is a good starting point to guide
 us through the rest of the design.
 
-Another operation used by transposed convolution is $col2im$. It cherry picks the elements computed by GEMM
-and places them in the destination image. The code is given in Listing \ref{code:col2im}:
+Another operation used by transposed convolution is $col2im$. It cherry picks the elements computed by
+\gls{gemm} and places them in the destination image. The code is given in Listing \ref{code:col2im}:
 
 \begin{code}
 \begin{minted}{c}
@@ -86,11 +79,12 @@ for (int j = 0; j < n; ++j) {
 \label{code:col2im}
 \end{code}
 
-Here $data\_im$ is the target image while $data\_col$ is the result of GEMM. The rest is self-explanatory.
-For transposed convolution, $data\_im$ is typically smaller than $data\_col$. This leads to a key optimization
-idea: it is possible to merge GEMM and $col2im$ together and compute transposed convolution by doing GEMM
-sparsely. In doing so, $data\_col$ can be abandoned and the results will be directly placed in $data\_im$,
-that is, there is no need for an extra large buffer for intermediate results.
+Here $data\_im$ is the target image while $data\_col$ is the result of \gls{gemm}. The rest is
+self-explanatory.  For transposed convolution, $data\_im$ is typically smaller than $data\_col$.
+This leads to a key optimization idea: it is possible to merge \gls{gemm} and $col2im$ together and
+compute transposed convolution by doing \gls{gemm} sparsely. In doing so, $data\_col$ can be abandoned
+and the results will be directly placed in $data\_im$, that is, there is no need for an extra large
+buffer for intermediate results.
 
 \begin{code}
 \begin{minted}{c}

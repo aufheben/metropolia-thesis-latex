@@ -2,9 +2,17 @@
 
 \chapter{Quantization}
 
+%In such networks a large part of the computation is done with an
+%operation called the \gls{gemm}. An efficient implementation of \gls{gemm} is crucial to the
+%acceleration. However, \glspl{cnn} are normally implemented with floating-point numbers, which are usually less
+%efficient to handle in hardware than fixed-point numbers. A class of techniques called quantization can
+%be used to carry out the computation in fixed-point numbers and then convert the result back to
+%floating-point numbers, realizing high performance in hardware. Chapter 4 provides a detailed discussion
+%of the quantization scheme used in this project.
+
 Machine learning programs normally represent numbers as floating-point. Although floating-point numbers
 have limited precision and can sometimes lead to numerical instability when the numbers involved get too
-small or too large, they are intuitive and easy to work with. But floating-point arithmetic can be very
+small or too large, they are intuitive and easy to work with. But floating-point arithmetic can be rather
 expensive to implement in hardware. Modern FPGAs contain dedicated DSP unit, some of which natively
 support floating-point, other require special Intellectual Property (IP) cores to implement the relevant
 circuitry. FPGA's processing power mainly shines on fixed-point. In order to run our model in fixed-point

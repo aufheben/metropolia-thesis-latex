@@ -16,13 +16,13 @@ the distribution it has learned.
 % The task of $D$ is to learn to correctly label both types of examples. Meanwhile, $G$ learns to
 % generate examples that mimic real world examples.
 
-During the training, we feed two types of examples to $D$: existing training examples and examples generated
+During the training, two types of examples are fed to $D$: existing training examples and examples generated
 by $G$. The system can be trained with regular stochastic gradient descent and backpropagation. The training
 process improves the ability of both $D$ and $G$, until eventually the output of $G$ will be
 indistinguishable from real world examples to $D$. Once trained, $D$ can be discarded and $G$ can be used
 in different applications.
 
-In the original paper both networks are multilayer perceptrons, however many different network types have been
+In the original paper both networks are multilayer perceptrons. However, many different network types have been
 proposed since then. In this project, $D$ and $G$ are both deep convolutional neural networks which are
 suitable for image processing. The training of $D$ and $G$ is done on GPU with floating-point numbers. Since
 $D$ is discarded after training, from now on we are only concerned with $G$.
@@ -37,12 +37,12 @@ $D$ is discarded after training, from now on we are only concerned with $G$.
 \end{figure}
 
 
-\ref{fig:network_structure} shows the network structure of $G$, with five transposed convolutional layers.
-Except for the last transposed convolutional layer, the previous four transposed convolutional layers each
-are followed by a layer of batch normalization, and a layer of rectified linear units (ReLU) for
+Figure \ref{fig:network_structure} shows the network structure of $G$, with five transposed convolutional
+layers.  Except for the last transposed convolutional layer, the previous four transposed convolutional layers
+each are followed by a layer of batch normalization, and a layer of rectified linear units (ReLU) for
 activation. The last transposed convolutional layer is followed by a layer of $tanh$ function applied to
-each element as activation. The parameters for each layer is detailed in \ref{table:network_layers}.
-The network structure is rather simple compared with many other much larger networks. ResNet, for example,
+each element as activation. The parameters for each layer is detailed in Table \ref{table:network_layers}.
+The network structure is rather simple, compared with many other much larger networks. ResNet, for example,
 contains a deep cascade of 152 layers.
 
 \begin{table}[h]
@@ -77,12 +77,13 @@ In CNNs, convolutional layer extracts various features from the input, essential
 operation. Transposed convolutional layer, also known as fractionally strided convolutional layers, or sometime
 erroneously as deconvolutional layer, on the other hand performs upsampling on the input. Normally unsampling
 is often done with interpolation, but transposed convolution as a novel approach offers trainability which
-makes it useful for neural networks. Conceptually, if we run a convolution of stride $f$ backwards,
-it can be seen as convolution with stride $1/f$, hence the name fractionally strided convolution.
+makes it useful for neural networks. Conceptually, if a convolution layer of stride $f$ is run backwards,
+it can be seen as convolution layer with stride $1/f$, hence the name fractionally strided convolution.
 
 \subsection{Convolution}
 
-To understand its operation, let us work though a simple numerical example. We begin with regular convolution
+To understand the operation of transposed convolution, it is perhaps natural to start with regular convolution
+first. It is also helpful to work though a simple numerical example, starting with $2D$ convolution
 with an input of $4 \times 4$ matrix $A$:
 
 $$
@@ -95,7 +96,7 @@ A =
   \end{pmatrix}
 $$
 
-Let the kernel be a $2x2$ matrix $K$:
+Let the kernel be a $2 \times 2$ matrix $K$:
 
 $$
 K =
@@ -105,14 +106,14 @@ K =
   \end{pmatrix}
 $$
 
-Assume the convolution operates with padding of $1$ and stride of $2$, that is, we slide $K$ across the
-zero-padded matrix $B$ with a step of $2$. $B$ is shown below:
+Assume the convolution operates with padding of $1$ and stride of $2$, that is, $K$ is slid across the
+zero-padded matrix $B$ with a step of $2$, from left to right, top to bottom. $B$ is shown below:
 
 $$
 B =
   \begin{pmatrix}
-    0 & 0 & 0 & 0 & 0 & 0 \\
-    0 & 1 & 2 & 3 & 4 & 0 \\
+    {\color{red}0} & {\color{red}0} & {\color{blue}0} & {\color{blue}0} & 0 & 0 \\
+    {\color{red}0} & {\color{red}1} & {\color{blue}2} & {\color{blue}3} & 4 & 0 \\
     0 & 4 & 3 & 2 & 1 & 0 \\
     0 & 1 & 2 & 3 & 4 & 0 \\
     0 & 4 & 3 & 2 & 1 & 0 \\
@@ -120,8 +121,9 @@ B =
   \end{pmatrix}
 $$
 
-When $K$ is slided across $B$, the overlapping entries in $B$ is called a \textit{patch}. If we view $K$ and
-the corresponding patch in $B$ as vectors, at each step, a dot product is computed between them and stored as
+When $K$ is slid across $B$, the overlapping entries in $B$ is called a \textit{patch}. The first two
+patches are shown in red and blue respectively. At each step, an element-wise inner product (Frobenius inner
+product) $\langle K,P \rangle_{F}$ is computed between $K$ and the corresponding patch $P$ and stored as
 an element in the result matrix $C$:
 
 $$

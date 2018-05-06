@@ -12,17 +12,15 @@ multiplication is often heavily optimized.
 The generator is a deep \gls{cnn}. In such networks a large part of the computation is done with an
 operation called the \gls{gemm}. Therefore, an efficient implementation of \gls{gemm} is crucial to the
 acceleration. However, CNNs are normally implemented with floating-point numbers, which are usually less
-efficient to handle in hardware than fixed-point numbers. If only we could carry out the computation in
-fixed-point numbers and then convert the result back to floating-point numbers! Such techniques do exist
-and they are referred to as quantization, which is the key to realize high performance in hardware. Chapter 5
-provides a detailed discussion of the quantization scheme used in this project.
-
+efficient to handle in hardware than fixed-point numbers. A class of techniques called quantization can
+be used to carry out the computation in fixed-point numbers and then convert the result back to
+floating-point numbers, realizing high performance in hardware. Chapter 4 provides a detailed discussion
+of the quantization scheme used in this project.
 
 General matrix multiplication (GEMM) is considered as the \textit{de facto} standard operation
 contained in the Basic Linear Algebra Subprograms (BLAS) specification. It has many implementations for
 different platforms, and utilizes optimizations like vectorization (e.g. SSE), SIMD-style instructions,
 parallelism, cache-awareness, etc.
-
 
 GEMM is defined as
 

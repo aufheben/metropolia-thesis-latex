@@ -87,13 +87,13 @@ end
 \label{code:simple_for_verilog}
 \end{code}
 
-The code is separated into a sequantial block and a combinational next-state logic block for clarity.
+The code is separated into a sequential block and a combinational next-state logic block for clarity.
 The merged C code of \mintinline{c}{gemm} and \mintinline{c}{col2im} shown in listing
 \ref{code:transposed_convolution_in_c} can be then translated into Verilog using the structure
 as a template.
 
 The \mintinline{c}{transconv} module is connected to the input, weight, and output \glspl{bram}. A single
-8-bit or 32-bit data is read or writtenin every cycle, which is quite inefficient. On the other hand,
+8-bit or 32-bit data is read or written in every cycle, which is quite inefficient. On the other hand,
 although the data bus width can be configured for the \gls{bram}, a maximum of two read ports are available.
 So it is possible to increase the data bus width to read more bytes in each cycle, but this is left
 as a future work for optimization. Indeed, I/O is the main bottleneck in the design, as in many other systems.

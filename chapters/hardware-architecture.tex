@@ -31,7 +31,7 @@ into the \gls{bram} and it is inevitable to interact with external storage devic
 Flash or the 16MB \gls{psram} on the Nexys 4 board.
 
 Because the resources on the board is quite limited, it is easiest to compute the model in a layer-by-layer
-fasion without exploiting the layer-wise parallelism. First, the weights of a transposed
+fashion without exploiting the layer-wise parallelism. First, the weights of a transposed
 convolutional layer are read from the external storage device, the layer is then computed, followed by one or
 more auxiliary layers such as batch normalization or activation layer. The output is then transfered from
 the output \gls{bram} buffer to the input \gls{bram} buffer, then the weights of the next transposed

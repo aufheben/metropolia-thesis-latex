@@ -39,7 +39,7 @@ integers to accommodate the accumulation. Eventually the final output of the mod
 $float$.
 
 The quantization works by first identifying the range of the data. In neural networks, the values are usually
-distributed within a relatively small range. For instance, for 8-bit quantization, if the mininum of the
+distributed within a relatively small range. For instance, for 8-bit quantization, if the minimum of the
 weights is $-10.0$ and maximum is $20.0$, then $-10.0$ would be mapped to $0$, and $20.0$ mapped to $255$.
 However, there is an additional requirement that can bring great benefits to subsequent computations:
 the real value $0$ should be exactly representable. As will be shown, this can be achieved with a small

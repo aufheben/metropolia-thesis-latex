@@ -137,10 +137,10 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
 \label{code:transposed_convolution_in_c}
 \end{code}
 
-The key to understand this code of merge is to notice that the for loop indexed by \mintinline{c}{j} in
-\mintinline{c}{gemm} can be splitted into three nested for loops indexed by $c_im$, $h_offset$ and $w_offset$.
-Similarly, the for loop indexed by \mintinline{c}{i} in \mintinline{c}{gemm} is equivalent to the two
-nested for loops indexed by $h_col$ and $w_col$, same as in \mintinline{c}{col2im}.
+The key to understand this code of merge is to notice that the for-loop indexed by \mintinline{c}{j} in
+\mintinline{c}{gemm} can be splitted into three nested for-loop indexed by $c_im$, $h_offset$ and $w_offset$.
+Similarly, the for-loop indexed by \mintinline{c}{i} in \mintinline{c}{gemm} is equivalent to the two
+nested for-loop indexed by $h_col$ and $w_col$, same as in \mintinline{c}{col2im}.
 
 This last C code in listing \ref{code:transposed_convolution_in_c} serves as the blueprint for implementing
 transposed convolution on \gls{fpga} with Verilog.

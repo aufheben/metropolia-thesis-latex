@@ -29,12 +29,15 @@
   \\ \hline
   \multicolumn{2}{|p{15cm}|}{\vspace{-22pt}
   The parallel nature of FPGA makes it a promising candidate to accelerate machine learning tasks. The
-  purpose of this project is to demonstrate the acceleration capabilities of FPGA for deep convolutional
-  neural networks. The project is carried out by implementing a generative model on the Nexys 4 trainer
-  board with an Artix-7 FPGA from Xilinx. The pre-trained model is part of the popular Generative Adversarial
-  Networks (GANs) which can create realistic images that resemble the training data. The core is written in
-  Verilog, but several IPs are also used to facilitate the design. Xilinx Vivado 2017.4 is used as the
-  development platform. \newline
+  purpose of this project was to explore the acceleration capabilities of FPGA for deep convolutional
+  neural networks.
+  
+  The project was carried out by implementing a generative model on the Nexys 4 trainer board with an
+  Artix-7 FPGA from Xilinx. The pre-trained model is part of the popular Generative Adversarial Networks
+  (GANs) which can create realistic images that resemble the training data. The core was written in
+  Verilog, but several IPs were also used to facilitate the design. Xilinx Vivado 2017.4 was used as the
+  development platform. Both fixed-point and floating-point arithmetics were used to achieve a balance
+  between efficiency and accuracy.\newline
   
   The basic design is able to generate $64 \times 64$ images at $?fps$, an encouraging result with much space
   for optimization. This paper serves as a detailed documentation of the design and implementation process,

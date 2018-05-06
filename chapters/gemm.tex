@@ -95,7 +95,9 @@ for (int j = 0; j < n; ++j) {
 \end{code}
 
 Here \mintinline{c}{data_im} is the target image while \mintinline{c}{data_col} is the result of \gls{gemm}.
-The outermost loop iterates through the columns of $C \in \mathbb{R}^{k \times n}$.
+The outermost loop iterates through the columns of $C \in \mathbb{R}^{k \times n}$. The two nested loops
+iterate the rows of $C$, since \mintinline{c}{m = inputHeight * inputWidth}. \mintinline{c}{c_im} is the
+index of the channel in the output image. %\mintinline{c}{h_offset} and \mintinline{c}{w_offset} are the offset in each 
 
 For transposed convolution, \mintinline{c}{data_im} is typically smaller than
 \mintinline{c}{data_col}. This leads to a key optimization idea: it is possible to merge \gls{gemm} and
@@ -110,8 +112,8 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
     for (int h_offset = 0; h_offset < kernelH; h_offset++) {
         for (int w_offset = 0; w_offset < kernelW; w_offset++) {
             int i = 0;
-            for (long h_col = 0; h_col < inputHeight; ++h_col) {
-                for (long w_col = 0; w_col < inputWidth; ++w_col) {
+            for (long h_col = 0; h_col < inputHeight; h_col++) {
+                for (long w_col = 0; w_col < inputWidth; w_col++) {
                     int h_im = h_col * strideH - padH + h_offset * dilationH;
                     int w_im = w_col * strideW - padW + w_offset * dilationW;
                     if (h_im >= 0 && h_im < outputHeight &&
@@ -135,7 +137,12 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
 \label{code:transposed_convolution_in_c}
 \end{code}
 
-This last C code in Listing \ref{code:transposed_convolution_in_c} serves as the blueprint for implementing
+The key to understand this code of merge is to notice that the for loop indexed by \mintinline{c}{j} in
+\mintinline{c}{gemm} can be splitted into three nested for loops indexed by $c_im$, $h_offset$ and $w_offset$.
+Similarly, the for loop indexed by \mintinline{c}{i} in \mintinline{c}{gemm} is equivalent to the two
+nested for loops indexed by $h_col$ and $w_col$, same as in \mintinline{c}{col2im}.
+
+This last C code in listing \ref{code:transposed_convolution_in_c} serves as the blueprint for implementing
 transposed convolution on \gls{fpga} with Verilog.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

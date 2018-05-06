@@ -83,8 +83,14 @@ The system stores weights of transposed convolutional layer in the 16MB Quad-SPI
 contains a transposed convolution module TC, a batch normalization module BN, a ReLU module ReLU,
 and a tanh module Tanh. The unit can be configured to be TC-BN-ReLU or TC-Tanh. The network computes one
 layer at a time. Before reading the final layer, the output of the computation unit is transferred to the
-input buffer.  The final result is sent to computer via \gls{uart} (serial port).
+input buffer. The final result is sent to computer via \gls{uart} (serial port). Figure
+\ref{fig:computation_unit} shows the structure of the computation unit.
 
-(Block diagram to be added)
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=1]{computation_unit}
+  \caption{Computation Unit Block Diagram}
+  \label{fig:computation_unit}
+\end{figure}
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

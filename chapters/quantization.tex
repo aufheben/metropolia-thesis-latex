@@ -25,8 +25,8 @@ numbers are quantized to 8-bit, the model size is reduced by $75\%$. This cuts d
 requirement and improves memory efficiency. Consequently, the power consumption can be greatly reduced.
 
 One could imagine that quantization would cause a tremendous loss to model precision, for example, when
-32-bit floating-point numbers (ranges from $1.175494351e-38$ to $3.402823466e38$) are converted to
-8-bit unsigned integers (ranges from 0 to 255). However, one of the peculiar
+32-bit floating-point numbers (ranging from $1.175494351 \times 10^{-38}$ to $3.402823466 \times 10^38$) are converted to
+8-bit unsigned integers (ranging from 0 to 255). However, one of the peculiar
 properties of neural networks is that they are very resilient to noise. Of course this is also one of the
 reasons why they are so successful in real world applications. We could view the internal precision loss of
 quantization as a form of internal noise, it turned out that the precision loss incurred is rather small.

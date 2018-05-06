@@ -138,7 +138,7 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
 \end{code}
 
 The key to understand this code of merge is to notice that the for-loop indexed by \mintinline{c}{j} in
-\mintinline{c}{gemm} can be splitted into three nested for-loop indexed by $c_im$, $h_offset$ and $w_offset$.
+\mintinline{c}{gemm} can be splitted into three nested for-loop indexed by \mintinline{c}{c_im}, \mintinline{c}{h_offset} and \mintinline{c}{w_offset}.
 Similarly, the for-loop indexed by \mintinline{c}{i} in \mintinline{c}{gemm} is equivalent to the two
 nested for-loop indexed by $h_col$ and $w_col$, same as in \mintinline{c}{col2im}.
 

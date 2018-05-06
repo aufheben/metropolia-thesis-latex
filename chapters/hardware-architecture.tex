@@ -96,7 +96,7 @@ input buffer. The final result is sent to computer via \gls{uart} (serial port).
 The input of the TC module are quantized 8-bit integers, while the output of the TC module are 32-bit
 integers, which are input to the BN module. The BN first dequantizes the 32-bit input to 32-bit
 single-precision floating-point numbers according to IEEE 754 standard, then the computation is carried
-out in floating-point and the results are feed to the ReLU module, which simply sets negative values to
+out in floating-point and the results are fed to the ReLU module, which simply sets negative values to
 $0.0$ and then quantizes the output to 8-bit integers again and overwrites the input buffer with the
 results. When the flow reaches the final Tanh module, the 32-bit input integers are dequantized just as the
 BN module, $tanh$ is then performed on the floating-point numbers, and the final floating-point result is

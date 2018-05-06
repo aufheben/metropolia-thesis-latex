@@ -34,7 +34,7 @@ proposed since then. In this project, $D$ and $G$ are both deep convolutional ne
 suitable for image processing. The training of $D$ and $G$ is done on GPU with floating-point numbers. Since
 $D$ is discarded after training, from now on we are only concerned with $G$.
 
-\section{\gls{dcgan} Network Structure}
+\section{DCGAN Network Structure}
 
 \begin{figure}[h]
   \centering
@@ -169,7 +169,7 @@ B_{col} =
 $$
 
 This operation is called $im2col$, namely, image to columns. Now, compute the product $K_{row} * B_{col}$, we
-obtain a $1x9$ matrix:
+obtain a $1 \times 9$ matrix:
 
 $$
 \begin{pmatrix}

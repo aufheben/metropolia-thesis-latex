@@ -177,7 +177,7 @@ the \gls{fpga} is configured. Weights will be loaded from the \gls{psram} subseq
 interface and results in much faster loading of weights.
 
 The second optimization is to further introduce several small caches using distributed RAM. These caches
-are implemented using \glspl{lut} and are faster than \glspl{BRAM}, i.e., they can be read asynchronously.
+are implemented using \glspl{lut} and are faster than \glspl{bram}, i.e., they can be read asynchronously.
 Once inputs and weights are loaded into these caches, computation can then be carried out in parallel,
 making use of more DSP48 slices.
 

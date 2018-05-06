@@ -75,7 +75,7 @@ for (int j = 0; j < n; ++j) {
 \label{code:col2im}
 \end{code}
 
-Here \mintinline{c}{data_im} is the target image while $data\_col$ is the result of \gls{gemm}. The rest is
+Here \mintinline{c}{data_im} is the target image while \mintinline{c}{data_col} is the result of \gls{gemm}. The rest is
 self-explanatory.  For transposed convolution, $data\_im$ is typically smaller than $data\_col$.
 This leads to a key optimization idea: it is possible to merge \gls{gemm} and $col2im$ together and
 compute transposed convolution by doing \gls{gemm} sparsely. In doing so, $data\_col$ can be abandoned

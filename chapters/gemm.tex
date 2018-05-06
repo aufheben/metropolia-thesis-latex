@@ -56,6 +56,11 @@ the variables used for transposed convolution.
     channel (sometimes also called input plane)
   \item \mintinline{c}{nInputChannel} is the number of input channel in total, thus the input is a
     $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, inputHeight, inputWidth)}
+  \item With \mintinline{c}{m = inputHeight * inputWidth} and \mintinline{c}{k = nInputChannel}, the input
+    tensor is stored as a matrix $A \in \mathbb{R}^{m \times k}$
+  \item \mintinline{c}{kH} and \mintinline{c}{kW} are the height and width of each convolutional kernel channel
+  \item Each kernel is also a $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, kH, kW)}
+  \item $nOutputChannel$ is the number of output channels
 \end{itemize}
 
 The code of $col2im$ is given in listing \ref{code:col2im}:

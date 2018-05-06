@@ -7,9 +7,9 @@ Artificial Intelligence.  Google, for example, developed its own \gls{asic} name
 to accelerate tensor computations. The formidable cost of such endeavors limits \gls{asic} development to
 the big players in the industry. For tech startups and hobbyists, the \gls{fpga} comes to rescue by filling
 the gap between high-cost customized ICs and the need to make specialized hardware for certain
-applications. The programmable logic blocks contained in the FPGA can be reconfigured, making it ideal for
-situations where "`in the field"' functionality update is required. It is also a valuable tool for fast
-prototyping and verification of \gls{asic} design with low cost.
+applications. The programmable logic blocks contained in the \gls{fpga} can be reconfigured, making it
+ideal for situations where "`in the field"' functionality update is required. It is also a valuable tool
+for fast prototyping and verification of \gls{asic} design with low cost.
 
 Given a phenomenon, a discriminative model takes data that can be observed from the phenomenon and outputs
 data that can only be inferred. For instance, let the phenomenon be a group of people speaking different
@@ -35,7 +35,7 @@ and quality of generation.
 
 The marriage of \gls{fpga} and \gls{gan} seems to be an interesting topic in its own right. This project
 explores such possibilities by implementing a pre-trained generator model of \gls{dcgan} proposed by
-Alec Radford \textit{et al}. \cite{radford:conv_gan} on FPGA to generate realistic pictures.
+Alec Radford \textit{et al}. \cite{radford:conv_gan} on \gls{fpga} to generate realistic pictures.
 Figure \ref{fig:bedroom} shows a group of generated images of bedrooms.
 
 \begin{figure}[h]
@@ -45,7 +45,7 @@ Figure \ref{fig:bedroom} shows a group of generated images of bedrooms.
   \label{fig:bedroom}
 \end{figure}
 
-Nowadays \gls{hls} is a quite popular option for implementing algorithms on \gls{FPGA}. \gls{hls} takes a
+Nowadays \gls{hls} is a quite popular option for implementing algorithms on \gls{fpga}. \gls{hls} takes a
 behavioral description written in a high-level programming language such as C and translates the description
 into \gls{rtl} \gls{hdl} such as Verilog or VHDL. This approach is particularly favored by software
 engineers who wish to quickly convert a software program into hardware implementation. In this project,

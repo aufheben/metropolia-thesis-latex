@@ -58,9 +58,13 @@ the variables used for transposed convolution.
     $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, inputHeight, inputWidth)}
   \item With \mintinline{c}{m = inputHeight * inputWidth} and \mintinline{c}{k = nInputChannel}, the input
     tensor is stored as a matrix $A \in \mathbb{R}^{m \times k}$
-  \item \mintinline{c}{kH} and \mintinline{c}{kW} are the height and width of each convolutional kernel channel
-  \item Each kernel is also a $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, kH, kW)}
-  \item $nOutputChannel$ is the number of output channels
+  \item \mintinline{c}{kernelH} and \mintinline{c}{kernelW} are the height and width of each
+    convolutional kernel channel
+  \item Each kernel is also a $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, kernelH, kernelW)}
+  \item \mintinline{c}{nOutputChannel} is the number of output channels
+  \item There are $nOutputChannel$'s of kernels, each responsible for producing an output channel
+  \item With \mintinline{c}{k = nInputChannel} and \mintinline{c}{n = nOutputChannel * kernelH * kernelW},
+    the kernel tensor is stored as a matrix $B \in \mathbb{R}^{k \times n}$
 \end{itemize}
 
 The code of $col2im$ is given in listing \ref{code:col2im}:
@@ -103,8 +107,8 @@ that is, there is no need for an extra large buffer for intermediate results.
 \begin{minted}{c}
 int j = 0;
 for (int c_im = 0; c_im < nOutputChannel; c_im++) {
-    for (int h_offset = 0; h_offset < kH; h_offset++) {
-        for (int w_offset = 0; w_offset < kW; w_offset++) {
+    for (int h_offset = 0; h_offset < kernelH; h_offset++) {
+        for (int w_offset = 0; w_offset < kernelW; w_offset++) {
             int i = 0;
             for (long h_col = 0; h_col < inputHeight; ++h_col) {
                 for (long w_col = 0; w_col < inputWidth; ++w_col) {

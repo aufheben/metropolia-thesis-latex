@@ -62,7 +62,7 @@ the variables used for transposed convolution.
     convolutional kernel channel
   \item Each kernel is also a $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, kernelH, kernelW)}
   \item \mintinline{c}{nOutputChannel} is the number of output channels
-  \item There are $nOutputChannel$'s of kernels, each responsible for producing an output channel
+  \item There are \mintinline{c}{nOutputChannel}'s of kernels, each responsible for producing an output channel
   \item With \mintinline{c}{k = nInputChannel} and \mintinline{c}{n = nOutputChannel * kernelH * kernelW},
     the kernel tensor is stored as a matrix $B \in \mathbb{R}^{k \times n}$
 \end{itemize}

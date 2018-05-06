@@ -30,9 +30,12 @@ our system. Once quantized, the model size is roughly 3.5MB. So it is not possib
 into the \gls{bram} and it is inevitable to interact with external storage devices, e.g., the 16MB Quad-SPI
 Flash or the 16MB \gls{psram} on the Nexys 4 board.
 
-Because the resources on the It is natural to compute the model in a layer-by-layer fashion: read
-the weights and biases of a transposed convolutional layer from the external storage device and compute the
-layer, followed by one or more auxiliary layers such as batch normalization or activation layer.
+Because the resources on the board is quite limited, it is easiest to compute the model in a layer-by-layer
+fasion without exploiting the layer-wise parallelism. First, the weights of a transposed
+convolutional layer are read from the external storage device, the layer is then computed, followed by one or
+more auxiliary layers such as batch normalization or activation layer. The output is then transfered from
+the output \gls{bram} buffer to the input \gls{bram} buffer, then the weights of the next transposed
+convolutional layer are read and the process continues until it reaches the final layer.
 
 In order to allocate \gls{bram} properly, it is necessary to list the detailed memory requirements of each
 layer.
@@ -67,7 +70,7 @@ In table \ref{table:memory_requirements}, the numbers in parentheses are the bit
 indicates the maximum input/output size is 65536 in 32-bit, the maximum weight size is 2097152 in 8-bit, the
 maximum bias size is 512 in 32-bit. However, notice that when both input is 65536 in 32-bit, the corresponding
 layers are batch normalization and ReLU. This means that the same buffer can be used to store both the
-input and output because the input can be updated in place. Consequently the input buffer only needs to
+input and output because the input can be updated in-place. Consequently the input buffer only needs to
 store 65536 values in 8-bit.
 
 To conclude, four main buffers are needed: input buffer (65536 bytes), output buffer (262144 bytes),
@@ -76,10 +79,11 @@ the quantization parameters.
 
 \section{Architecture}
 
-The system stores weights and biases in the 16MB Quad-SPI Flash. A computation unit contains a
-transposed convolution module TC, a batch normalization module BN, a ReLU module ReLU, and a tanh module
-Tanh. The unit can be configured to be TC-BN-ReLU or TC-Tanh. The network computes one layer at a time.
-The final result is sent to computer via \gls{uart} (serial port).
+The system stores weights of transposed convolutional layer in the 16MB Quad-SPI Flash. A computation unit
+contains a transposed convolution module TC, a batch normalization module BN, a ReLU module ReLU,
+and a tanh module Tanh. The unit can be configured to be TC-BN-ReLU or TC-Tanh. The network computes one
+layer at a time. Before reading the final layer, the output of the computation unit is transferred to the
+input buffer.  The final result is sent to computer via \gls{uart} (serial port).
 
 (Block diagram to be added)
 

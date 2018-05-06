@@ -11,7 +11,7 @@ multiplication is often heavily optimized.
 
 \gls{gemm} is considered as the \textit{de facto} standard operation
 contained in the \gls{blas} specification. It has many implementations for
-different platforms, and utilizes optimizations like \gls{simd} instructions,
+different platforms, and exhaustively utilizes various optimizations like \gls{simd} instructions,
 parallelism, cache-awareness, etc.
 
 \gls{gemm} is defined as
@@ -19,11 +19,7 @@ parallelism, cache-awareness, etc.
 $$C \leftarrow \alpha op(A) op(B) + \beta C,$$
 
 where $\alpha, \beta \in \mathbb{R}$, $op(X)$ is either $X$ or $X^\intercal$. In our particular case for
-transposed convolution, $\alpha = 1$, $\beta = 1$, $op(X) = X$, so \gls{gemm} reduces to
-
-$$C \leftarrow A B + C$$
-
-where C is the bias matrix to be added to the product $A B$.
+transposed convolution, $\alpha = 1$, $\beta = 0$, $op(X) = X$, so \gls{gemm} reduces to $C \leftarrow A B$.
 
 A subtle detail in the implementation of \gls{gemm} is the order of storage of matrix entries. There are two
 different orders to store the same matrix: row-major order or column-major order. In row-major order,
@@ -52,7 +48,7 @@ This implementation is straightforward and not very efficient, but it is a good 
 us through the rest of the design.
 
 Another operation used by transposed convolution is $col2im$. It cherry picks the elements computed by
-\gls{gemm} and places them in the destination image. The code is given in Listing \ref{code:col2im}:
+\gls{gemm} and places them in the destination image. The code is given in listing \ref{code:col2im}:
 
 \begin{code}
 \begin{minted}{c}
@@ -79,7 +75,7 @@ for (int j = 0; j < n; ++j) {
 \label{code:col2im}
 \end{code}
 
-Here $data\_im$ is the target image while $data\_col$ is the result of \gls{gemm}. The rest is
+Here \mintinline{c}{data_im} is the target image while $data\_col$ is the result of \gls{gemm}. The rest is
 self-explanatory.  For transposed convolution, $data\_im$ is typically smaller than $data\_col$.
 This leads to a key optimization idea: it is possible to merge \gls{gemm} and $col2im$ together and
 compute transposed convolution by doing \gls{gemm} sparsely. In doing so, $data\_col$ can be abandoned
@@ -119,5 +115,6 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
 \end{code}
 
 This last C code in Listing \ref{code:transposed_convolution_in_c} serves as the blueprint for implementing
-transposed convolution on FPGA with Verilog.
+transposed convolution on \gls{fpga} with Verilog.
+
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

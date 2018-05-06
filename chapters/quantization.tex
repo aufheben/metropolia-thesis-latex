@@ -20,8 +20,13 @@ on FPGA, it is necessary to convert the model into fixed-point representation, t
 quantization. When the result is computed by FPGA, it is then converted back to floating-point, which is
 naturally called dequantization.
 
+Quantization brings additional benefits with the compression of model size. When 32-bit floating-point
+numbers are quantized to 8-bit, the model size is reduced by $75\%$. This cuts down memory bandwidth
+requirement and improves memory efficiency. Consequently, the power consumption can be greatly reduced.
+
 One could imagine that quantization would cause a tremendous loss to model precision, for example, when
-32-bit floating-point numbers are converted to 8-bit unsigned integers. However, one of the peculiar
+32-bit floating-point numbers (ranges from $1.175494351e-38$ to $3.402823466e38$) are converted to
+8-bit unsigned integers (ranges from 0 to 255). However, one of the peculiar
 properties of neural networks is that they are very resilient to noise. Of course this is also one of the
 reasons why they are so successful in real world applications. We could view the internal precision loss of
 quantization as a form of internal noise, it turned out that the precision loss incurred is rather small.
@@ -30,7 +35,15 @@ There exist many different quantization methods. This project adopted the quanti
 implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point. The
 original 32-bit single-precision weights represented in $float$ are mapped to $uint8\_t$. GEMM is then
 carried out on the FPGA board with these 8-bit integers. Intermediate MACC results are 32-bit
-integers to accommodate the accumulation. Eventually the final output of the model is converted back to $float$.
+integers to accommodate the accumulation. Eventually the final output of the model is converted back to
+$float$.
+
+The quantization works by first identifying the range of the data. In neural networks, the values are usually
+distributed within a relatively small range. For instance, for 8-bit quantization, if the mininum of the
+weights is $-10.0$ and maximum is $20.0$, then $-10.0$ would be mapped to $0$, and $20.0$ mapped to $255$.
+However, there is an additional requirement that can bring great benefits to subsequent computations:
+the real value $0$ should be exactly representable. As will be shown, this can be achieved with a small
+modification to the mapping equation.
 
 Th quantization scheme can be derived with basic algebra. Define a real number $f$ as the result of an affine
 mapping $f = S q + B$, where $q$ is the corresponding quantized integer, $S \in \mathbb{R}$ is a constant

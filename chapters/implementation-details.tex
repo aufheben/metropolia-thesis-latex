@@ -4,7 +4,7 @@
 
 \section{Development Environment and Method}
 
-Xilinx Vivado version 2017.04 is used as the development platform for FPGA. The typical workflow involves
+Xilinx Vivado version 2017.04 is used as the development platform for \gls{fpga}. The typical workflow involves
 the following steps:
 
 \begin{itemize}
@@ -17,9 +17,9 @@ the following steps:
   \item Create bitstream and test on device
 end{itemize}
 
-A parallel C implementation is developed on Linux simultaneously to facilitate the FPGA development.
+    A parallel C implementation is developed on Linux simultaneously to facilitate the \gls{fpga} development.
 Its main function is to provide algorithm verification, especially numerical comparison of output layers
-between software implementation and FPGA implementation.
+    between software implementation and \gls{fpga} implementation.
 
 \section{Implementing the Transposed Convolutional Layer}
 
@@ -132,7 +132,7 @@ The ports of both blocks are shown in figure \ref{fig:dsp48_macro_0} and figure 
 \subsection{DSP48 Pipelining}
 
 The DSP48 slice can be used without pipelining. However, that is essentially a combinational circuit and
-the propagation delay will significantly reduce $F_{max}$. To run the FPGA at a higher frequency, it is
+the propagation delay will significantly reduce $F_{max}$. To run the \gls{fpga} at a higher frequency, it is
 necessary to use pipeline registers. In our first design, only the register after the multiplier is used
 therefore the result is delayed by one clock cycle.
 
@@ -151,7 +151,15 @@ conversion between fixed-point and floating-point formats, multiplication, accum
 inverse square root, and many others. The input precision can be configured as half, single or
 double-precision, or even customized width of exponent and fraction. It is also possible to choose
 DSP slice usage, from logic only to maximum three DSP48 slices. Finally, the user is able to decide
-the goal of optimization, using minimum resources or maximum clock frequency $F_{max}$.
+the goal of optimization, using minimum resources or maximum clock frequency $F_{max}$. An example
+floating-point multiplier is shown in figure \ref{fig:floating_point_multiplier}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{floating_point_multiplier}
+  \caption{A Configured Floating-point Multiplier IP Instance}
+  \label{fig:floating_point_multiplier}
+\end{figure}
 
 \section{Testbench}
 
@@ -164,8 +172,8 @@ the goal of optimization, using minimum resources or maximum clock frequency $F_
 
 \section{Future Work on Optimization}
 
-The first obvious optimization is to transfer all weight data from Dual-SPI Flash to the \gls{PSRAM} once
-the \gls{FPGA} is configured. Weights will be loaded from the \gls{PSRAM} subsequently, which has a parallel
+The first obvious optimization is to transfer all weight data from Dual-SPI Flash to the \gls{psram} once
+the \gls{fpga} is configured. Weights will be loaded from the \gls{psram} subsequently, which has a parallel
 interface and results in much faster loading of weights.
 
 The second optimization is to further introduce several small caches using distributed RAM. These caches

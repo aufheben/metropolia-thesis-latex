@@ -29,21 +29,21 @@
   \\ \hline
   \multicolumn{2}{|p{15cm}|}{\vspace{-22pt}
   The parallel nature of FPGA makes it a promising candidate to accelerate machine learning tasks. The
-  purpose of this project was to explore the acceleration capabilities of FPGA for deep convolutional
+  purpose of this project was to study the acceleration capabilities of FPGA for deep convolutional
   neural networks.\newline
   
   The project was carried out by implementing a generative model on the Nexys 4 trainer board with an
   Artix-7 FPGA from Xilinx. The pre-trained model is part of the popular Generative Adversarial Networks
   (GANs) which can create realistic images that resemble the training data. The core was written in
-  Verilog, but several IPs were also used to facilitate the design. Xilinx Vivado 2017.4 was used as the
-  development platform. Both fixed-point and floating-point arithmetics were used to achieve a balance
+  Verilog, but several Xilinx IPs were also used to facilitate the design. Xilinx Vivado 2017.4 was used as
+  the development platform. Both fixed-point and floating-point arithmetics were used to achieve a balance
   between efficiency and accuracy.\newline
   
-  The basic design is able to generate $64 \times 64$ images at $?fps$, an encouraging result with much space
-  for optimization. This paper serves as a detailed documentation of the design and implementation process,
-  as well as optimization methods. The core operation of the generative model called transposed
+  With simplicity as the main goal of the design, some optimizations were deliberately avoided.
+  This paper serves as a detailed documentation of the design and implementation process.
+  Possible optimization methods are discussed. The core operation of the generative model called transposed
   convolution is described. A method to map network weights and biases from high precision floating-point
-  representation to low precision integral representation, known as quantization, is discussed. The
+  representation to low precision integral representation, known as quantization, is derived. The
   quantization scheme leads to an efficient implementation the General Matrix Multiplication (GEMM) operation,
   which is at the heart of neural network computations. As a conclusion, a brief comparison is made between
   FPGA, CPU, ASIC and GPU for machine learning acceleration.

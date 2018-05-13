@@ -11,13 +11,13 @@ applications. The programmable logic blocks contained in the \gls{fpga} can be r
 ideal for situations where "`in the field"' functionality update is required. It is also a valuable tool
 for fast prototyping and verification of \gls{asic} design with low cost.
 
-Given a phenomenon, a discriminative model takes data that can be observed from the phenomenon and outputs
+In machine learning, a discriminative model takes data that can be observed from a phenomenon and outputs
 data that can only be inferred. For instance, let the phenomenon be a group of people speaking different
 languages, a discriminative model can take the speech data and infer the language being spoken. In other
-word, the model classifies the speeches into different language types or labels. This can be done, e.g.,
+words, the model classifies the speeches into different language types or labels. This can be done, e.g.,
 by analyzing the linguistic models of each speech and observe the differences. By contrast, a generative
 model outputs both data that can be directly observed as well as data that can only be inferred. Therefore,
-in the previous example, a generative model would have to learn each language and be able to generate
+in the previous example, a generative model would have to actually learn each language and be able to generate
 speeches of them. Probabilistically speaking, a discriminative model learns the conditional probability
 distribution $P(Y \vert X)$ (the probability of language $Y$ given speech $X$), while a generative model
 learns the joint probability distribution $P(X,Y) = P(X \vert Y)P(Y)$, which explicitly models the speech
@@ -25,18 +25,19 @@ generation process of each language class.
 
 Generative models are interesting since they are capable of creating new data that resembles the real world
 data. These models enable the machine to paint new paintings, compose new music, or write new poetries.
-Many types of generative models exist, including deep belief networks, variational autoencoder,
+Many types of generative model exist, including deep belief networks, variational autoencoder,
 Boltzmann machine, \glspl{gan}, etc. A \gls{gan} model consists of two different neural networks trained to
 compete against each other in order to learn about the probability distribution of a particular dataset.
 The training process pits the two players in a minimax game so that the performance of both networks improves
-over time. Introduced in 2014 by Ian Goodfellow \textit{et al}. \cite{goodfellow:gan}, it soon gained
+over time. Introduced in 2014 by Ian Goodfellow \textit{et al.} \cite{goodfellow:gan}, it soon gained
 popularity in the machine learning community, kindled a wave of research on improving the training properties
 and generation quality.
 
 The marriage of \gls{fpga} and \gls{gan} seems to be an interesting topic in its own right. This project
 explores such possibilities by implementing a pre-trained generator model of \gls{dcgan} proposed by
-Alec Radford \textit{et al}. \cite{radford:conv_gan} on \gls{fpga} to generate realistic pictures.
-Figure \ref{fig:bedroom} shows a group of generated images of bedrooms.
+Alec Radford \textit{et al.} \cite{radford:conv_gan} on \gls{fpga} to generate realistic pictures.
+Figure \ref{fig:bedroom} shows a group of generated images of bedrooms trained from the LSUN dataset
+\cite{yu15lsun}.
 
 \begin{figure}[h]
   \centering
@@ -47,11 +48,12 @@ Figure \ref{fig:bedroom} shows a group of generated images of bedrooms.
 
 Nowadays \gls{hls} is a popular option for implementing algorithms on \gls{fpga}. \gls{hls} takes a
 behavioral description written in a high-level programming language such as C and translates the description
-into \gls{rtl} \gls{hdl} such as Verilog or VHDL. This approach is particularly favored by software
-engineers who wish to quickly convert a software program into hardware implementation. In this project,
-however, low-level HDL was chosen to implement the generator model to gain finer control of the implementation
-details. A naïve Verilog version was implemented first, then several optimization possibilities were
-experimented. This paper serves as a rather detailed documentation of the design and implementation process.
-The source code of this project is published on GitHub \cite{github:dcgan_fpga} under Apache License 2.0.
+into \gls{rtl} \gls{hdl} such as Verilog or VHDL. This approach is particularly favored by engineers with
+a software background who wish to quickly convert an algorithmic description into hardware implementation.
+In this project, however, low-level \gls{hdl} was chosen to implement the generator model to gain finer
+control of the implementation details. The architecture was designed with simplicity in mind and abstained
+from premature optimizations. This paper serves as a rather detailed documentation of the design and
+implementation process. The source code of this project is published on GitHub \cite{github:dcgan_fpga} under
+Apache License 2.0.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

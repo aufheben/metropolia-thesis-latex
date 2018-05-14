@@ -35,22 +35,22 @@ discarded after training, we will be on only concerned with $G$ from this point.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.5]{network_structure}
+  \includegraphics[scale=0.75]{network_structure}
   \caption{\gls{dcgan} \cite{radford:conv_gan} Network Structure}
   \label{fig:network_structure}
 \end{figure}
 
-Figure \ref{fig:network_structure} shows the network structure of $G$, with five transposed convolutional
-layers. Except for the last transposed convolutional layer, each of the previous four transposed convolutional
-layers is followed by a layer of batch normalization, and a layer of \gls{relu} for
-activation. Activation functions introduces nonlinearity to the network. The last transposed convolutional
-layer is followed by a layer of $tanh$ function applied to each element as activation. The parameters for
-each layer is detailed in Table \ref{table:network_layers}.  The network structure is rather simple,
-compared with many other much larger networks. ResNet, for example, contains a deep cascade of 152 layers.
+Figure \ref{fig:network_structure} shows the network structure of $G$, with five transposed convolutional (TC)
+layers and their output dimentions. Except for the last TC layer, each of the previous four TC layers is
+followed by a layer of batch normalization (BN), and a layer of \gls{relu} for activation. The last TC layer
+is followed by a $tanh$ layer for activation. The function of BN and ReLU layers will be explained later.
+The parameters for each layer is detailed in Table \ref{table:network_layers}. The network structure is
+rather simple, compared with other much larger networks. ResNet, for example, contains a deep cascade of
+152 layers.
 
 \begin{table}[h]
   \centering
-  \caption{\gls{dcgan} Layers: TC stands for transposed convolution, BN stands for batch normalization}
+  \caption{\gls{dcgan} Layer Parameters}
   \begin{tabular}{l | l | l }
     \toprule
     Layer & Type & Description \\

@@ -13,11 +13,12 @@
 Machine learning programs normally represent numbers as floating-point. Although floating-point numbers
 have limited precision and can sometimes lead to numerical instability when the numbers involved get too
 small or too large, they are intuitive and easy to work with. But floating-point arithmetic can be rather
-expensive to implement in hardware. Modern FPGAs contain dedicated DSP unit, some of which natively
-support floating-point, other require special Intellectual Property (IP) cores to implement the relevant
-circuitry. FPGA's processing power mainly shines on fixed-point. In order to run our model in fixed-point
-on FPGA, it is necessary to convert the model into fixed-point representation, through a process known as
-quantization. When the result is computed by FPGA, it is then converted back to floating-point, which is
+expensive to implement in hardware. Modern \glspl{fpga} contain dedicated \gls{dsp} unit, some of which
+natively
+support floating-point, others require special \gls{ip} cores to implement the relevant
+circuitry. \gls{fpga}'s processing power mainly shines on fixed-point. In order to run our model in fixed-point
+on \gls{fpga}, it is necessary to convert the model into fixed-point representation, through a process known as
+quantization. When the result is computed by \gls{fpga}, it is then converted back to floating-point, which is
 naturally called dequantization.
 
 Quantization brings additional benefits with the compression of model size. When 32-bit floating-point
@@ -34,7 +35,7 @@ quantization as a form of internal noise, it turned out that the precision loss 
 There exist many different quantization methods. This project adopted the quantization scheme
 implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point. The
 original 32-bit single-precision weights represented in $float$ are mapped to $uint8\_t$. GEMM is then
-carried out on the FPGA board with these 8-bit integers. Intermediate MACC results are 32-bit
+carried out on the \gls{fpga} board with these 8-bit integers. Intermediate MACC results are 32-bit
 integers to accommodate the accumulation. Eventually the final output of the model is converted back to
 $float$.
 

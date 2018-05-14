@@ -116,9 +116,9 @@ K =
   \end{pmatrix}
 $$
 
-A convolution can have some extra parameters. $padding$ will pad the input with $p$ rows or columns
-of zeros at the borders. $stride$ is the step size to slide the kernel. Assume the convolution operates
-with $padding = 1$ and $stride = 2$, that is, $K$ is slid across the zero-padded matrix $B$ with a step of
+A convolution can have some extra parameters. Padding size $p$ pads the input with $p$ rows or columns
+of zeros at the borders. Stride size $s$ is the step size to slide the kernel. Assume the convolution operates
+with $p = 1$ and $s = 2$, that is, $K$ is slid across the zero-padded matrix $B$ with a step of
 $2$, from left to right, top to bottom. $B$ is shown below:
 
 $$
@@ -133,10 +133,10 @@ B =
   \end{pmatrix}
 $$
 
-When $K$ is slid across $B$, the overlapping entries in $B$ is called a \textit{patch}. The first two
-patches are shown in red and blue respectively. At each step, an element-wise inner product (Frobenius inner
-product) $\langle K,P \rangle_{F}$ is computed between $K$ and the corresponding patch $P$ and stored as
-an element in the result matrix $C$:
+When $K$ is slid across $B$, the overlapping entries in $B$ during each step is called a \textit{patch}.
+The first two patches are shown in red and blue respectively. At each step, an element-wise inner product
+(Frobenius inner product) $\langle K,P \rangle_{F}$ is computed between $K$ and the corresponding patch $P$
+and stored as an element in the result matrix $C$:
 
 $$
 C =

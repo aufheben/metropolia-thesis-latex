@@ -109,8 +109,8 @@ which would bring extra overhead to the \gls{gemm} computation. Let us expand th
 \end{split}
 \end{equation}
 
-Note that $\sum_{i} 1$ is k, the number of columns of $A$ and the number of rows of $B$. We have obtained
-four terms here. The first term $\sum_{i} p_i q_i$ is the main term. The second term, $- Z_B \sum_{i} p_i$
+Note that $\sum_{i} 1$ is k, the number of columns of $A$ and the number of rows of $B$. Four terms are
+obtained here. The first term $\sum_{i} p_i q_i$ is the main term. The second term, $- Z_B \sum_{i} p_i$
 is the product of $- Z_B$ and the sum of the current row, which only needs to be calculated once and added
 to each result of the first term. The third term $- Z_A \sum_{i} q_i$ and the fourth term $k Z_A Z_B$ are
 similar. The computation can be carried out by computing the first term as the core, and add the rest three

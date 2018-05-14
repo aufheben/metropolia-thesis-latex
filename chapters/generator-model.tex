@@ -41,7 +41,7 @@ discarded after training, we will be on only concerned with $G$ from this point.
 \end{figure}
 
 Figure \ref{fig:network_structure} shows the network structure of $G$, with five transposed convolutional (TC)
-layers and their output dimentions. Except for the last TC layer, each of the previous four TC layers is
+layers and their output dimensions. Except for the last TC layer, each of the previous four TC layers is
 followed by a layer of batch normalization (BN), and a layer of \gls{relu} for activation. The last TC layer
 is followed by a $tanh$ layer for activation. The function of BN and ReLU layers will be explained later.
 The parameters for each layer is detailed in Table \ref{table:network_layers}. The network structure is
@@ -279,7 +279,7 @@ A'' =
   \end{pmatrix}
 $$
 
-Convole $A''$ (without padding since $p' = 0$) with the same kernel 'K' using stride $s' = 1$, the result
+Convolve $A''$ (without padding since $p' = 0$) with the same kernel 'K' using stride $s' = 1$, the result
 is
 
 $$
@@ -292,7 +292,7 @@ C' =
   \end{pmatrix}
 $$
 
-In practice, the tranposed convolution can also be implemented with a single matrix multiplication
+In practice, the transposed convolution can also be implemented with a single matrix multiplication
 followed by a $col2im$ operation. The details are explained in chapter 3.
 
 \section{Batch Normalization Layer}

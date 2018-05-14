@@ -26,7 +26,7 @@ Once inputs and weights are loaded into these caches, more parallelism can be ac
 making use of more \gls{dsp} slices.
 
 Finally, on an \gls{fpga} chip with more \gls{bram} capacity, layer-level parallelism can be exploited, i.e.,
-several layers can be calculated at the same time. This invovles modifying the current ring structure and
+several layers can be calculated at the same time. This involves modifying the current ring structure and
 forward data to subsequent layers in a single pass. Each layer will work on its input concurrently, but
 some global coordination and scheduling is needed in order to avoid data overrun.
 

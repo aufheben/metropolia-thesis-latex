@@ -116,7 +116,7 @@ K =
   \end{pmatrix}
 $$
 
-Except the kernel size $k$ ($k = 2$ in this case),
+Except the kernel size $k$ ($2$ in this case),
 a convolution can have some extra parameters. Padding size $p$ pads the input with $p$ rows or columns
 of zeros at the borders. Stride size $s$ is the step size to slide the kernel. Assume the convolution operates
 with $p = 1$ and $s = 2$, that is, $K$ is slid across the zero-padded matrix $B$ with a step of
@@ -243,16 +243,17 @@ the forward pass and the backward pass.
 The kernel size $k$, padding $p$ and stride $s$ parameters of the convolution affect the corresponding
 transposed convolution as well. The detailed relationship is well documented By V. Dumoulin and F. Visin in
 \cite{dumoulin:conv_arithmetic}. For instance, the previous convolution example has an input size $i = 4$,
-which satisfies the condition $(i + 2p - k \mod s) = 0$, then the associated transposed convolution whose
-input size $i' = 3$ can be described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$,
-where $\tilde{i}'$ is the size of the input dilated by $s - 1$ zeros between each input element. The output
+which satisfies the condition $(i + 2p - k \mod s) = 0$, then the associated transposed convolution
+(input size $i' = 3$) can be described by a regular convolution on input size $\tilde{i}'$ and parameters
+$k' = k$, $s' = 1$ and $p' = k - p - 1$,
+where $\tilde{i}'$ is the size when the input is dilated by $s - 1$ zeros between each element. The output
 size is
 
 \begin{equation}
   o' = s(i' - 1) + k - 2p.
 \end{equation}
 
-Here, $\tilde{i}' = 5$, $k' = 2$, $s' = 1$ and $p' = 0$. The output size $o' = 4$, which equals to the
+Here, $\tilde{i}' = 5$, $k' = 2$, $s' = 1$ and $p' = 0$. The output size $o' = 4$, which equals the
 original input size $i$ of the associated convolution. To illustrate this with a numerical example, let
 the input $3 \times 3$ matrix be
 
@@ -291,7 +292,8 @@ C' =
   \end{pmatrix}
 $$
 
-In practice, the tranposed convolution can be implemented 
+In practice, the tranposed convolution can also be implemented with a single matrix multiplication
+followed by a $col2im$ operation. The details are explained in the next chapter.
 
 \section{Batch Normalization Layer}
 

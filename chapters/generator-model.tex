@@ -50,7 +50,7 @@ rather simple, compared with other much larger networks. ResNet, for example, co
 
 \begin{table}[h]
   \centering
-  \caption{\gls{dcgan} Layer Parameters}
+  \caption{\gls{dcgan} Layer Details}
   \begin{tabular}{l | l | l }
     \toprule
     Layer & Type & Description \\
@@ -77,18 +77,24 @@ rather simple, compared with other much larger networks. ResNet, for example, co
 \section{Transposed Convolutional Layer}
 
 In \gls{cnn}s, convolutional layer extracts various features from the input, essentially performing a
-downsampling operation. Transposed convolutional layer, also known as fractionally strided convolutional
-layers, or sometime erroneously as deconvolutional layer, on the other hand performs upsampling on the input.
-Normally unsampling is often done with interpolation, but transposed convolution as a novel approach offers
-trainability which makes it useful for neural networks. Conceptually, if a convolution layer of stride $f$
-is run backwards, it can be seen as convolution layer with stride $1/f$, hence the name fractionally
-strided convolution.
+downsampling operation. Transposed convolutional layer \cite{transposed_convolution}, also known as
+fractionally strided convolutional layers, or sometime erroneously as deconvolutional layer, on the other
+hand performs upsampling on the input.  Upsampling is needed in the generator model to successively map the
+$1 \times 100$ random noise input to a much larger $3 \times 64 \times 64$ output. Unsampling of data is often
+done with interpolation, but transposed convolution as a novel approach can map the input to a richer space
+than what can be achieved with interpolation. It also offers trainability which makes it useful for neural
+networks. Conceptually, if a convolution layer of stride $f$ is run backwards, it can be seen as convolution
+layer with stride $1/f$, hence the name fractionally strided convolution.
 
 \subsection{Convolution}
 
-To understand the operation of transposed convolution, it is perhaps natural to start with regular convolution
-first. It is also helpful to work though a simple numerical example, starting with a $2D$ convolution
-with an input of $4 \times 4$ matrix $A$:
+To understand the operation of transposed convolution, it is perhaps natural to start with the regular
+convolution first by working through a simple numerical example. With convolution, the input and output
+can both have multiple channels. A convolutional kernel has the same number of channels that matches the
+input channels. The number of kernels determines the number of output channels, that is, each
+kernel generates one output channel. For instance, with a $2D$ convolution for which the number of input
+channels and output channels are both $1$, a single one-channel $2D$ kernel is needed. Let the input be
+a $4 \times 4$ matrix $A$:
 
 $$
 A =

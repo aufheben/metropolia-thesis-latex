@@ -242,9 +242,10 @@ the forward pass and the backward pass.
 
 The kernel size $k$, padding $p$ and stride $s$ parameters of the convolution affect the corresponding
 transposed convolution as well. The detailed relationship is well documented By V. Dumoulin and F. Visin in
-\cite{dumoulin:conv_arithmetic}. In particular, for the previous convolution example whose input size $i = 4$,
-the associated transposed convolution can be described by $i'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$,
-where $i'$ is the size of the input dilated by $s - 1$ zeros. The output size is:
+\cite{dumoulin:conv_arithmetic}. For instance, the previous convolution example has an input size $i = 4$,
+which satisfies the condition $i + 2p - k \mod s = 0$, then the associated transposed convolution can be
+described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where $\tilde{i}'$ is the size of the
+input dilated by $s - 1$ zeros. The output size is:
 
 \begin{equation}
   o' = s(i' - 1) + k - 2p.

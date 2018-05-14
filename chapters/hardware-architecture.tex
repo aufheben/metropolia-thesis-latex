@@ -66,15 +66,16 @@ layers are batch normalization and ReLU. This means that the same buffer can be 
 input and output because the input can be updated in-place. Consequently the input buffer only needs to
 store 65536 values in 8-bit.
 
-To conclude, three main buffers are needed: input buffer (65536 bytes), output buffer (262144 bytes),
+To conclude, three main \gls{bram} buffers are needed: input buffer (65536 bytes),
+output buffer (262144 bytes),
 weight buffer (2097152 bytes). Some auxiliary buffers are needed to store other data such as biases.
 Because the resources on the board is quite limited, it is easiest to compute the model in a layer-by-layer
 fashion without exploiting the layer-wise parallelism. First, the weights of a transposed
-convolutional layer are read from the external storage device into the weight \gls{bram} buffer,
+convolutional layer are read from the external storage device into the weight buffer,
 the layer is then computed, followed by one or
 more auxiliary layers such as batch normalization or activation layer. A batch normalization layer
-reads and writes the same output \gls{bram} buffer. A ReLU layer reads this buffer and writes its output to
-the input \gls{bram} buffer, forming a circular structure. Then, the weights of the next transposed
+reads and writes the same output buffer. A ReLU layer reads this buffer and writes its output to
+the input buffer, forming a circular structure. Then, the weights of the next transposed
 convolutional layer are read and the process continues until it reaches the final Tanh layer.
 
 

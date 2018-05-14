@@ -179,26 +179,4 @@ it is imported and integrated into the main project.
   \label{fig:behavioral_simulation}
 \end{figure}
 
-\section{Future Work on Optimization}
-
-As mentioned before, the main goal of the design was simplicity, so many optimizations were not applied.
-This section briefly discusses possible optimization methods.
-
-The first obvious optimization is to transfer all weight data from Dual-SPI Flash to the \gls{psram} once
-the \gls{fpga} is configured. Weights will be loaded from the \gls{psram} subsequently, which has a parallel
-interface and will result in much faster loading of weights.
-
-Another optimization mentioned is to widen the data buses connected to the \gls{psram}. Multiple data
-can be loaded at the same time and calculation can be performed in parallel on these data. The current
-design is highly sequential and only utilizes around $15\%$ of the \gls{dsp} slices.
-
-Yet another optimization is to further introduce several small caches using distributed RAM. These caches
-are implemented using \glspl{lut} and are faster than \glspl{bram}, i.e., they can be read asynchronously.
-Once inputs and weights are loaded into these caches, more parallelism can be achieved,
-making use of more DSP48 slices.
-
-Finally, on an \gls{fpga} chip with more \gls{bram} capacity, layer-level parallelism can be exploited, i.e.,
-several layers can be calculated at the same time. This invovles modifying the current ring structure and
-forward data stream to subsequent layers.
-
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

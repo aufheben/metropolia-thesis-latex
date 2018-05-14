@@ -1,7 +1,33 @@
 % Conclusions
 
-\chapter{Conclusions}
+\chapter{Conclusions and Future Work}
 
-TODO
+This section concludes the project by briefly discussing possible optimization methods.
+As mentioned before, the main goal of the design was simplicity, so many optimizations were not applied.
+The main bottleneck in the current design, as in many computing systems, is the I/O bandwidth. During
+each clock cycle, only one unit of data is read, which is rather inefficient. Therefore, most of the
+optimizations are focused on improving I/O efficiency.
+
+The first obvious optimization is to transfer all weight data from Dual-SPI Flash to the \gls{psram} once
+the \gls{fpga} is configured. Weights will be loaded from the \gls{psram} subsequently, which has a parallel
+interface and will result in much faster loading of weights.
+Burst transfer can be used to read data from \gls{psram} and further reduces I/O latency. This is done by
+placing the starting address on the address bus, a fixed amount of data is then read repeatedly in a single
+``burst''.
+
+Another optimization mentioned is to widen the data buses connected to the \gls{psram}. Current the
+data address of input buffer is only 8-bit. This can be increased to 32-bit or even more. Multiple data
+can be loaded at the same time and calculation can be performed in parallel on these data. The current
+design is highly sequential and only utilizes around $15\%$ of the \gls{dsp} slices.
+
+Yet another optimization is to further introduce several small caches using distributed RAM. These caches
+are implemented using \glspl{lut} and are faster than \glspl{bram}, i.e., they can be read asynchronously.
+Once inputs and weights are loaded into these caches, more parallelism can be achieved,
+making use of more \gls{dsp} slices.
+
+Finally, on an \gls{fpga} chip with more \gls{bram} capacity, layer-level parallelism can be exploited, i.e.,
+several layers can be calculated at the same time. This invovles modifying the current ring structure and
+forward data to subsequent layers in a single pass. Each layer will work on its input concurrently, but
+some global coordination and scheduling is needed in order to avoid data overrun.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

@@ -26,16 +26,18 @@ numbers are quantized to 8-bit, the model size is reduced by $75\%$. This cuts d
 requirement and improves memory efficiency. Consequently, the power consumption can be greatly reduced.
 
 One could imagine that quantization would cause a tremendous loss to model precision, for example, when
-32-bit floating-point numbers (ranging from $1.175494351 \times 10^{-38}$ to $3.402823466 \times 10^38$) are converted to
+32-bit floating-point numbers (ranging from $1.175494351 \times 10^{-38}$ to $3.402823466 \times 10^{38}$)
+are converted to
 8-bit unsigned integers (ranging from 0 to 255). However, one of the peculiar
 properties of neural networks is that they are very resilient to noise. Of course this is also one of the
 reasons why they are so successful in real world applications. We could view the internal precision loss of
 quantization as a form of internal noise, it turned out that the precision loss incurred is rather small.
 
-There exist many different quantization methods. This project adopted the quantization scheme
-implemented in Google's \textit{gemmlowp} library, a low precision GEMM implementation for fixed-point. The
-original 32-bit single-precision weights represented in $float$ are mapped to $uint8\_t$. GEMM is then
-carried out on the \gls{fpga} board with these 8-bit integers. Intermediate MACC results are 32-bit
+There exist several different quantization methods. This project adopted the quantization scheme
+implemented in Google's \textit{gemmlowp} library, a low precision \gls{gemm} implementation for fixed-point.
+The original 32-bit single-precision weights represented in \mintinline{c}{float} are mapped to 
+\mintinline{c}{uint8\_t}. \gls{gemm} is then
+carried out on the \gls{fpga} board with these 8-bit integers. Intermediate \gls{mac} results are 32-bit
 integers to accommodate the accumulation. Eventually the final output of the model is converted back to
 $float$.
 
@@ -94,7 +96,7 @@ $\mathfrak{K}$. We have
 Therefore, once $\mathfrak{K}$ is computed, we can simply multiply it by a constant multiplier
 $M = \frac{S_A S_B}{S_C}$, then add the zero offset $Z_C$ to obtain the quantized value $r_C$. The computation
 of $\mathfrak{K}$ might seem problematic at first: it contains a subtraction operation for each entry,
-which would bring extra overhead to the GEMM computation. Let us expand this expression:
+which would bring extra overhead to the \gls{gemm} computation. Let us expand this expression:
 
 \begin{equation}
 \begin{split}

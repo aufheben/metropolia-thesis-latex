@@ -5,13 +5,13 @@
 The previous chapter discussed different ways to view the convolution operation and its cousin,
 the transposed convolution, both conceptually and implementationally. When it comes down to implementation,
 we have seen that both operations can be implemented with a single matrix multiplication. In other words,
-matrix multiplication is the main computational burden of these operations, meanwhile, real world applications
+matrix multiplication is the main computational burden of these operations. Meanwhile, real world applications
 often involve very large matrices. Therefore, as a low-level operation, the implementation of matrix
 multiplication is often heavily optimized.
 
 \gls{gemm} is considered as the \textit{de facto} standard operation
 contained in the \gls{blas} specification. It has many implementations for
-different platforms, and exhaustively utilizes various optimizations like \gls{simd} instructions,
+different platforms which exhaustively utilize various optimizations like \gls{simd} instructions,
 parallelism, cache-awareness, etc.
 
 \gls{gemm} is defined as
@@ -19,14 +19,16 @@ parallelism, cache-awareness, etc.
 $$C \leftarrow \alpha op(A) op(B) + \beta C,$$
 
 where $\alpha, \beta \in \mathbb{R}$, $op(X)$ is either $X$ or $X^\intercal$. In our particular case for
-transposed convolution, $\alpha = 1$, $\beta = 0$, $op(X) = X$, so \gls{gemm} reduces to $C \leftarrow A B$.
+transposed convolution, $\alpha = 1$, $\beta = 0$, $op(X) = X$, so \gls{gemm} reduces to the basic
+matrix multiplication $C \leftarrow A B$.
 
 A subtle detail in the implementation of \gls{gemm} is the order of storage of matrix entries. There are two
 different orders to store the same matrix: row-major order or column-major order. In row-major order,
 entries of rows are stored contiguously in memory, while in column-major order, entries of columns are
 consecutive to each other in memory.
 
-A naïve implementation of \gls{gemm} is shown in Listing \ref{code:naivegemm}. Here, $lda$, $ldb$ and $ldc$ are
+A naïve implementation of \gls{gemm} is shown in Listing \ref{code:naivegemm}. Here,
+\mintinline{c}{lda}, \mintinline{c}{ldb} and \mintinline{c}{ldc} are
 leading dimension of matrix $A$, $B$ and $C$, respectively.
 
 \begin{code}
@@ -138,9 +140,10 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
 \end{code}
 
 The key to understand this code of merge is to notice that the for-loop indexed by \mintinline{c}{j} in
-\mintinline{c}{gemm} can be splitted into three nested for-loop indexed by \mintinline{c}{c_im}, \mintinline{c}{h_offset} and \mintinline{c}{w_offset}.
+\mintinline{c}{gemm} can be splitted into three nested for-loop indexed by \mintinline{c}{c_im},
+\mintinline{c}{h_offset} and \mintinline{c}{w_offset}.
 Similarly, the for-loop indexed by \mintinline{c}{i} in \mintinline{c}{gemm} is equivalent to the two
-nested for-loop indexed by $h_col$ and $w_col$, same as in \mintinline{c}{col2im}.
+nested for-loop indexed by \mintinline{c}{h_col} and \mintinline{c}{w_col}, same as in \mintinline{c}{col2im}.
 
 This last C code in listing \ref{code:transposed_convolution_in_c} serves as the blueprint for implementing
 transposed convolution on \gls{fpga} with Verilog.

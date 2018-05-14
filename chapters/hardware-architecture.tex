@@ -15,8 +15,8 @@ Table \ref{table:hardware_resources} summarizes the hardware resources available
     Logic Slices & 15850 \\
     Block RAM & 4860 Kbits \\
     DSP Slices & 240 \\
-    Cellular RAM & 16MB \\
-    Quad-SPI Flash & 16MB
+    Cellular RAM & 16 MB \\
+    Quad-SPI Flash & 16 MB
   \end{tabular}
   \label{table:hardware_resources}
 \end{table}
@@ -24,11 +24,11 @@ Table \ref{table:hardware_resources} summarizes the hardware resources available
 \section{Calculate Memory Requirement}
 
 \gls{bram} will be the main active memory for input, output, weight, and bias data. The \gls{fpga} chip in use
-contains 4860 Kbits of \gls{bram}, which is 607.5KB. The original model size is around 13.7MB, which is
+contains 4860 Kbits of \gls{bram} or 607.5 KB. The original model size is around 13.7 MB, which is
 considered very compact when compared with other deep learning models but still very demanding for
-our system. Once quantized, the model size is roughly 3.5MB. So it is not possible to fit the entire model
-into the \gls{bram} and it is inevitable to interact with external storage devices, e.g., the 16MB Quad-SPI
-Flash or the 16MB \gls{psram} on the Nexys 4 board.
+our system. Once quantized, the model size is roughly 3.5 MB. So it is not possible to fit the entire model
+into the \gls{bram} and it is inevitable to interact with external storage devices, e.g., the 16 MB Quad-SPI
+Flash or the 16 MB \gls{psram} on the Nexys 4 board.
 
 Because the resources on the board is quite limited, it is easiest to compute the model in a layer-by-layer
 fashion without exploiting the layer-wise parallelism. First, the weights of a transposed
@@ -73,18 +73,19 @@ layers are batch normalization and ReLU. This means that the same buffer can be 
 input and output because the input can be updated in-place. Consequently the input buffer only needs to
 store 65536 values in 8-bit.
 
-To conclude, four main buffers are needed: input buffer (65536 bytes), output buffer (262144 bytes),
-weight buffer (2097152 bytes), bias buffer (16384 bytes). Some auxiliary buffers are needed to store
-the quantization parameters.
+To conclude, three main buffers are needed: input buffer (65536 bytes), output buffer (262144 bytes),
+weight buffer (2097152 bytes). Some auxiliary buffers are needed to store other data such as biases.
 
 \section{Architecture}
 
-The system stores weights of transposed convolutional layer in the 16MB Quad-SPI Flash. A computation unit
-contains a transposed convolution module TC, a batch normalization module BN, a ReLU module ReLU,
-and a tanh module Tanh. The unit can be configured to be TC-BN-ReLU or TC-Tanh. The network computes one
-layer at a time. Before reading the final layer, the output of the computation unit is transferred to the
-input buffer. The final result is sent to computer via \gls{uart} (serial port). Figure
-\ref{fig:computation_unit} shows the structure of the computation unit.
+The system stores weights of transposed convolutional layer in the 16MB Quad-SPI Flash. The input is
+forwarded into a computation unit which contains a transposed convolution module TC,
+a batch normalization module BN, a ReLU module ReLU, and a tanh module Tanh.
+The unit can be configured to be TC-BN-ReLU or TC-Tanh. The network computes one
+layer at a time, writing the output to the output buffer. Before reaching the final layer, the output of
+the computation unit is written to the input buffer, overwriting the previous input. The final result is
+sent to PC via \gls{uart} (serial port). Figure \ref{fig:computation_unit} shows the structure of the
+computation unit.
 
 \begin{figure}[h]
   \centering
@@ -93,13 +94,13 @@ input buffer. The final result is sent to computer via \gls{uart} (serial port).
   \label{fig:computation_unit}
 \end{figure}
 
-The input of the TC module are quantized 8-bit integers, while the output of the TC module are 32-bit
+The input of the TC module are quantized 8-bit integers. The output of the TC module are 32-bit
 integers, which are input to the BN module. The BN first dequantizes the 32-bit input to 32-bit
 single-precision floating-point numbers according to IEEE 754 standard, then the computation is carried
 out in floating-point and the results are fed to the ReLU module, which simply sets negative values to
 $0.0$ and then quantizes the output to 8-bit integers again and overwrites the input buffer with the
 results. When the flow reaches the final Tanh module, the 32-bit input integers are dequantized just as the
 BN module, $tanh$ is then performed on the floating-point numbers, and the final floating-point result is
-sent to the computer through \gls{uart}, which can then be displayed with a simple conversion script.
+sent to the computer through \gls{uart} and converted to PNG format with a simple conversion script.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

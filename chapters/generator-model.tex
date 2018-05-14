@@ -173,8 +173,8 @@ B_{col} =
   \end{pmatrix}
 $$
 
-This operation is called $im2col$, namely, image to columns. Now, compute the product $K_{row} * B_{col}$, we
-obtain a $1 \times 9$ matrix:
+This operation is called $im2col$, namely, image to columns. Now, compute the product $K_{row} * B_{col}$,
+a $1 \times 9$ matrix is obtained:
 
 $$
 \begin{pmatrix}
@@ -182,14 +182,14 @@ $$
 \end{pmatrix}
 $$
 
-Finally this matrix is "reshaped" to the desired $3 \times 3$ output which is $C$ using the operation $col2im$.
+Finally this matrix is ``reshaped'' to the desired $3 \times 3$ output $C$ using the operation $col2im$.
 
 \subsection{Represent Convolution as a Sparse Matrix}
 
-The procedure described in the previous section is how regular convolution would be implemented in practice.
-On the other hand, there is an alternative view of the convolution, also performed with a single
+The procedure just described in the previous section is how regular convolution would be implemented in
+practice. On the other hand, there is an alternative view of the convolution, also performed with a single
 matrix multiplication. This alternative view is impractical for implementation, but from which
-input and output can be easily reversed. To see this, first unroll the zero-padded input $B$ into
+the input and output can be easily reversed. To see this, first unroll the zero-padded input $B$ into
 a $36 \times 1$ matrix:
 
 \setcounter{MaxMatrixCols}{20}

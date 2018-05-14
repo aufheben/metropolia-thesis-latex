@@ -30,13 +30,6 @@ our system. Once quantized, the model size is roughly 3.5 MB. So it is not possi
 into the \gls{bram} and it is inevitable to interact with external storage devices, e.g., the 16 MB Quad-SPI
 Flash or the 16 MB \gls{psram} on the Nexys 4 board.
 
-Because the resources on the board is quite limited, it is easiest to compute the model in a layer-by-layer
-fashion without exploiting the layer-wise parallelism. First, the weights of a transposed
-convolutional layer are read from the external storage device, the layer is then computed, followed by one or
-more auxiliary layers such as batch normalization or activation layer. The output is then transfered from
-the output \gls{bram} buffer to the input \gls{bram} buffer, then the weights of the next transposed
-convolutional layer are read and the process continues until it reaches the final layer.
-
 In order to allocate \gls{bram} properly, it is necessary to list the detailed memory requirements of each
 layer.
 
@@ -75,6 +68,15 @@ store 65536 values in 8-bit.
 
 To conclude, three main buffers are needed: input buffer (65536 bytes), output buffer (262144 bytes),
 weight buffer (2097152 bytes). Some auxiliary buffers are needed to store other data such as biases.
+Because the resources on the board is quite limited, it is easiest to compute the model in a layer-by-layer
+fashion without exploiting the layer-wise parallelism. First, the weights of a transposed
+convolutional layer are read from the external storage device into the weight \gls{bram} buffer,
+the layer is then computed, followed by one or
+more auxiliary layers such as batch normalization or activation layer. A batch normalization layer
+reads and writes the same output \gls{bram} buffer. A ReLU layer reads this buffer and writes its output to
+the input \gls{bram} buffer, forming a circular structure. Then, the weights of the next transposed
+convolutional layer are read and the process continues until it reaches the final Tanh layer.
+
 
 \section{Architecture}
 
@@ -99,8 +101,14 @@ integers, which are input to the BN module. The BN first dequantizes the 32-bit 
 single-precision floating-point numbers according to IEEE 754 standard, then the computation is carried
 out in floating-point and the results are fed to the ReLU module, which simply sets negative values to
 $0.0$ and then quantizes the output to 8-bit integers again and overwrites the input buffer with the
-results. When the flow reaches the final Tanh module, the 32-bit input integers are dequantized just as the
+results. This quantization process is done by calculating quantization parameters on the fly.
+When the flow reaches the final Tanh module, the 32-bit input integers are dequantized just as the
 BN module, $tanh$ is then performed on the floating-point numbers, and the final floating-point result is
 sent to the computer through \gls{uart} and converted to PNG format with a simple conversion script.
+
+This combination of floating-point and fixed-point layers achieves a balance between efficiency and
+accuracy. The Floating-point \gls{ip} core provided by Xilinx Vivado makes the implementation much easier
+by providing common floating-point operations such as multiplication, division, comparison, accumulation,
+inverse square root, etc.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

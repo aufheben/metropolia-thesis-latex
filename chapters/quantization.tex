@@ -35,8 +35,8 @@ quantization as a form of internal noise, it turned out that the precision loss 
 
 There exist several different quantization methods. This project adopted the quantization scheme
 implemented in Google's \textit{gemmlowp} library, a low precision \gls{gemm} implementation for fixed-point.
-The original 32-bit single-precision weights represented in \mintinline{c}{float} are mapped to 
-\mintinline{c}{uint8\_t}. \gls{gemm} is then
+The original 32-bit single-precision weights represented in \mintinline{}{float} are mapped to 
+\mintinline{c}{uint8_t}. \gls{gemm} is then
 carried out on the \gls{fpga} board with these 8-bit integers. Intermediate \gls{mac} results are 32-bit
 integers to accommodate the accumulation. Eventually the final output of the model is converted back to
 $float$.

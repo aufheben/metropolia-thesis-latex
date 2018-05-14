@@ -39,7 +39,7 @@ The original 32-bit single-precision weights represented in \mintinline{c}{float
 \mintinline{c}{uint8_t}. \gls{gemm} is then
 carried out on the \gls{fpga} board with these 8-bit integers. Intermediate \gls{mac} results are 32-bit
 integers to accommodate the accumulation. Eventually the final output of the model is converted back to
-$float$.
+\mintinline{c}{float}.
 
 The quantization works by first identifying the range of the data. In neural networks, the values are usually
 distributed within a relatively small range. For instance, for 8-bit quantization, if the minimum of the
@@ -68,7 +68,7 @@ it is clear the quantization mapping is done with
 \end{equation}
 
 Let $A \in \mathbb{R}^{m \times k}$, $B \in \mathbb{R}^{k \times n}$, $A B = C \in \mathbb{R}^{m \times n}$,
-the corresponding quantization parameters for $A$, $B$ and $C$ are $S_A$ and $Z_A$, $S_B$ and $Z_B$,
+let the corresponding quantization parameters for $A$, $B$ and $C$ be $S_A$ and $Z_A$, $S_B$ and $Z_B$,
 $S_C$ and $Z_C$. These parameters are predetermined, since in most cases the range of numbers in these matrices
 are known. Let $p$, $q$, $r$ be the entries in the quantized version of $A$, $B$ and $C$. 
 
@@ -94,8 +94,10 @@ $\mathfrak{K}$. We have
 \end{equation}
 
 Therefore, once $\mathfrak{K}$ is computed, we can simply multiply it by a constant multiplier
-$M = \frac{S_A S_B}{S_C}$, then add the zero offset $Z_C$ to obtain the quantized value $r_C$. The computation
-of $\mathfrak{K}$ might seem problematic at first: it contains a subtraction operation for each entry,
+$M = \frac{S_A S_B}{S_C}$, then add the zero offset $Z_C$ to obtain the quantized value $r_C$. The
+multiplication by $M$ can be implemented by multiplying an constant integer and right shift the
+result by a fixed number of bits. The computation of $\mathfrak{K}$ might seem problematic at first:
+it contains a subtraction operation for each entry,
 which would bring extra overhead to the \gls{gemm} computation. Let us expand this expression:
 
 \begin{equation}
@@ -108,9 +110,9 @@ which would bring extra overhead to the \gls{gemm} computation. Let us expand th
 \end{equation}
 
 Note that $\sum_{i} 1$ is k, the number of columns of $A$ and the number of rows of $B$. We have obtained
-four terms here. The first term $\sum_{i} p_i q_i$ is the main term. The second term, $- Z_B \sum{i} p_i$
+four terms here. The first term $\sum_{i} p_i q_i$ is the main term. The second term, $- Z_B \sum_{i} p_i$
 is the product of $- Z_B$ and the sum of the current row, which only needs to be calculated once and added
-to each result of the first term. The third term $- Z_A \sum{i} q_i$ and the fourth term $k Z_A Z_B$ are
+to each result of the first term. The third term $- Z_A \sum_{i} q_i$ and the fourth term $k Z_A Z_B$ are
 similar. The computation can be carried out by computing the first term as the core, and add the rest three
 terms one by one.
 

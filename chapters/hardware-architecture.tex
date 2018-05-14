@@ -108,8 +108,7 @@ BN module, $tanh$ is then performed on the floating-point numbers, and the final
 sent to the computer through \gls{uart} and converted to PNG format with a simple conversion script.
 
 This combination of floating-point and fixed-point layers achieves a balance between efficiency and
-accuracy. The Floating-point \gls{ip} core provided by Xilinx Vivado makes the implementation much easier
-by providing common floating-point operations such as multiplication, division, comparison, accumulation,
-inverse square root, etc.
+accuracy. The overhead introduced by on-chip quantization and dequantization is acceptable with the
+use of DSP48 slices.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

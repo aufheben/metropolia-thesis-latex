@@ -89,7 +89,7 @@ end
 
 The code is separated into a sequential block and a combinational next-state logic block for clarity.
 The merged C code of \mintinline{c}{gemm} and \mintinline{c}{col2im} shown in listing
-\ref{code:transposed_convolution_in_c} can be then translated into Verilog using the structure
+\ref{code:transposed_convolution_in_c} can be then translated into Verilog using this structure
 as a template.
 
 The \mintinline{c}{transconv} module is connected to the input, weight, and output \glspl{bram}. A single
@@ -133,8 +133,10 @@ The ports of both blocks are shown in figure \ref{fig:dsp48_macro_0} and figure 
 
 The DSP48 slice can be used without pipelining. However, that is essentially a combinational circuit and
 the propagation delay will significantly reduce $F_{max}$. To run the \gls{fpga} at a higher frequency, it is
-necessary to use pipeline registers. In our first design, only the register after the multiplier is used
-therefore the result is delayed by one clock cycle.
+necessary to use pipeline registers. In the first version of the design, only the register after the
+multiplier is used and the result is delayed by one clock cycle. This caused a negative \gls{wns} at
+$100 MHz$ clock frequency, which indicates that timing requirements are not met in certain paths. By
+using more pipeline registers, the results has a larger clock latency but $F_{max}$ can be improved.
 
 \begin{figure}[h]
   \centering
@@ -150,8 +152,9 @@ Xilinx Vivado is shipped with a Floating-point IP which supports many common ope
 conversion between fixed-point and floating-point formats, multiplication, accumulation, exponential,
 inverse square root, and many others. The input precision can be configured as half, single or
 double-precision, or even customized width of exponent and fraction. It is also possible to choose
-DSP slice usage, from logic only to maximum three DSP48 slices. Finally, the user is able to decide
-the goal of optimization, using minimum resources or maximum clock frequency $F_{max}$. An example
+DSP slice usage, from logic only to a maximum utilization of DSP48 slices. Finally, the user is able to decide
+the goal of optimization, using minimum resources or maximum clock frequency $F_{max}$. Choosing maximum
+clock frequency helps with the eventual timing closure, just as the case with DSP48 pipelining. An example
 floating-point multiplier is shown in figure \ref{fig:floating_point_multiplier}.
 
 \begin{figure}[h]
@@ -163,6 +166,12 @@ floating-point multiplier is shown in figure \ref{fig:floating_point_multiplier}
 
 \section{Testbench}
 
+Writing testbenches and performing simulation is a key step in \gls{fpga} development. In this project,
+each module is developed as separate projects with a corresponding testbench module and a synthesizable
+top module. The contents of these two modules are largely similar, but the testbench module usually operates
+on relatively simple data to make simulation easier. Once a module has passed simulation and on-board test,
+it is imported and integrated into the main project.
+
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.5]{behavioral_simulation}
@@ -172,13 +181,24 @@ floating-point multiplier is shown in figure \ref{fig:floating_point_multiplier}
 
 \section{Future Work on Optimization}
 
+As mentioned before, the main goal of the design was simplicity, so many optimizations were not applied.
+This section briefly discusses possible optimization methods.
+
 The first obvious optimization is to transfer all weight data from Dual-SPI Flash to the \gls{psram} once
 the \gls{fpga} is configured. Weights will be loaded from the \gls{psram} subsequently, which has a parallel
-interface and results in much faster loading of weights.
+interface and will result in much faster loading of weights.
 
-The second optimization is to further introduce several small caches using distributed RAM. These caches
+Another optimization mentioned is to widen the data buses connected to the \gls{psram}. Multiple data
+can be loaded at the same time and calculation can be performed in parallel on these data. The current
+design is highly sequential and only utilizes around $15\%$ of the \gls{dsp} slices.
+
+Yet another optimization is to further introduce several small caches using distributed RAM. These caches
 are implemented using \glspl{lut} and are faster than \glspl{bram}, i.e., they can be read asynchronously.
-Once inputs and weights are loaded into these caches, computation can then be carried out in parallel,
+Once inputs and weights are loaded into these caches, more parallelism can be achieved,
 making use of more DSP48 slices.
+
+Finally, on an \gls{fpga} chip with more \gls{bram} capacity, layer-level parallelism can be exploited, i.e.,
+several layers can be calculated at the same time. This invovles modifying the current ring structure and
+forward data stream to subsequent layers.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

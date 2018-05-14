@@ -91,8 +91,8 @@ layer with stride $1/f$, hence the name fractionally strided convolution.
 To understand the operation of transposed convolution, it is perhaps natural to start with the regular
 convolution first by working through a simple numerical example. With convolution, the input and output
 can both have multiple channels. A convolutional kernel has the same number of channels that matches the
-input channels. The number of kernels determines the number of output channels, that is, each
-kernel generates one output channel. For instance, with a $2D$ convolution for which the number of input
+input channels. The number of kernels determines the number of output channels, i.e., each
+kernel generates one output channel. For instance, for a $2D$ convolution for which the number of input
 channels and output channels are both $1$, a single one-channel $2D$ kernel is needed. Let the input be
 a $4 \times 4$ matrix $A$:
 
@@ -116,8 +116,10 @@ K =
   \end{pmatrix}
 $$
 
-Assume the convolution operates with padding of $1$ and stride of $2$, that is, $K$ is slid across the
-zero-padded matrix $B$ with a step of $2$, from left to right, top to bottom. $B$ is shown below:
+A convolution can have some extra parameters. $padding$ will pad the input with $p$ rows or columns
+of zeros at the borders. $stride$ is the step size to slide the kernel. Assume the convolution operates
+with $padding = 1$ and $stride = 2$, that is, $K$ is slid across the zero-padded matrix $B$ with a step of
+$2$, from left to right, top to bottom. $B$ is shown below:
 
 $$
 B =

@@ -196,7 +196,7 @@ a $36 \times 1$ matrix:
 \setcounter{MaxMatrixCols}{20}
 
 $$
-B'^\intercal =
+\tilde{B}^\intercal =
   \begin{pmatrix}
     0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 0 & 0 & 4 & \dots
   \end{pmatrix}
@@ -205,7 +205,7 @@ $$
 The output $C$ is also unrolled into a $9 \times 1$ matrix:
 
 $$
-C'^\intercal =
+\tilde{C}^\intercal =
   \begin{pmatrix}
     4 & 18 & 12 & 12 & 25 & 13 & 8 & 7 & 1
   \end{pmatrix}
@@ -223,7 +223,7 @@ M =
   \end{pmatrix}
 $$
 
-$M$ takes $B'$ as input and produces $C'$ as output, which again can be reshaped to $C$.
+$M$ takes $\tilde{B}$ as input and produces $\tilde{C}$ as output, which again can be reshaped to $C$.
 
 \subsection{Transposed Convolution}
 
@@ -243,13 +243,53 @@ the forward pass and the backward pass.
 The kernel size $k$, padding $p$ and stride $s$ parameters of the convolution affect the corresponding
 transposed convolution as well. The detailed relationship is well documented By V. Dumoulin and F. Visin in
 \cite{dumoulin:conv_arithmetic}. For instance, the previous convolution example has an input size $i = 4$,
-which satisfies the condition $i + 2p - k \mod s = 0$, then the associated transposed convolution can be
-described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where $\tilde{i}'$ is the size of the
-input dilated by $s - 1$ zeros. The output size is:
+which satisfies the condition $(i + 2p - k \mod s) = 0$, then the associated transposed convolution whose
+input size $i' = 3$ can be described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$,
+where $\tilde{i}'$ is the size of the input dilated by $s - 1$ zeros between each input element. The output
+size is
 
 \begin{equation}
   o' = s(i' - 1) + k - 2p.
 \end{equation}
+
+Here, $\tilde{i}' = 5$, $k' = 2$, $s' = 1$ and $p' = 0$. The output size $o' = 4$, which equals to the
+original input size $i$ of the associated convolution. To illustrate this with a numerical example, let
+the input $3 \times 3$ matrix be
+
+$$
+A' =
+  \begin{pmatrix}
+    1 & 2 & 3 \\
+    3 & 2 & 1 \\
+    1 & 2 & 3
+  \end{pmatrix}
+$$
+
+This matrix needs to be dilated with $s - 1 = 1$ zeros, resulting in
+
+$$
+A'' =
+  \begin{pmatrix}
+    1 & 0 & 2 & 0 & 3 \\
+    0 & 0 & 0 & 0 & 0 \\
+    3 & 0 & 2 & 0 & 1 \\
+    0 & 0 & 0 & 0 & 0 \\
+    1 & 0 & 2 & 0 & 3
+  \end{pmatrix}
+$$
+
+Convole $A''$ (without padding since $p' = 0$) with the same kernel 'K' using stride $s' = 1$, the result
+is
+
+$$
+C' =
+  \begin{pmatrix}
+    1 & 4 & 2 & 6 \\
+    9 & 8 & 6 & 4 \\
+    3 & 4 & 2 & 2 \\
+    3 & 8 & 6 & 12
+  \end{pmatrix}
+$$
 
 In practice, the tranposed convolution can be implemented 
 

@@ -83,8 +83,8 @@ hand performs upsampling on the input.  Upsampling is needed in the generator mo
 $1 \times 100$ random noise input to a much larger $3 \times 64 \times 64$ output. Unsampling of data is often
 done with interpolation, but transposed convolution as a novel approach can map the input to a richer space
 than what can be achieved with interpolation. It also offers trainability which makes it useful for neural
-networks. Conceptually, if a convolution layer of stride $f$ is run backwards, it can be seen as convolution
-layer with stride $1/f$, hence the name fractionally strided convolution.
+networks. Conceptually, if a convolution layer of stride $s$ is run backwards, it can be seen as convolution
+layer with stride $1/s$, hence the name fractionally strided convolution.
 
 \subsection{Convolution}
 
@@ -116,7 +116,8 @@ K =
   \end{pmatrix}
 $$
 
-A convolution can have some extra parameters. Padding size $p$ pads the input with $p$ rows or columns
+Except the kernel size $k$ ($k = 2$ in this case),
+a convolution can have some extra parameters. Padding size $p$ pads the input with $p$ rows or columns
 of zeros at the borders. Stride size $s$ is the step size to slide the kernel. Assume the convolution operates
 with $p = 1$ and $s = 2$, that is, $K$ is slid across the zero-padded matrix $B$ with a step of
 $2$, from left to right, top to bottom. $B$ is shown below:
@@ -227,8 +228,8 @@ $M$ takes $B'$ as input and produces $C'$ as output, which again can be reshaped
 \subsection{Transposed Convolution}
 
 In the previous section, the convolution is represented as a kernel-defined sparse matrix. Under this view,
-it is very easy to derive the \textit{backward pass}. This example convolution maps an input of $4 \times 4$
-to an output of $3 \times 3$, to reverse the direction of input and output, namely, to take an input of
+it is very easy to derive the \textit{backward pass}. The example convolution maps an input of $4 \times 4$
+to an output of $3 \times 3$. To reverse the direction of input and output, namely, to take an input of
 $3 \times 3$ and produce an output of $4 \times 4$, all it takes is to transpose $M$ to obtain $M^\intercal$
 of $36 \times 9$. When $M^\intercal$ is applied to the an $3 \times 3$ input unrolled to $9 \times 1$, the
 resulting $36 \times 1$ matrix is then reshaped to the desired $4 \times 4$ output. Hence the name
@@ -236,7 +237,20 @@ resulting $36 \times 1$ matrix is then reshaped to the desired $4 \times 4$ outp
 
 It needs to be pointed out that the term \textit{backward pass} instead of \textit{inverse operation},
 since $M^\intercal$ does not recover the numerical values of $B$ from $C$, it only recovers the shape of $B$,
-therefore it is misleading to call this operation deconvolution.
+therefore it is misleading to call this operation deconvolution. Also, the same kernel $K$ defines both
+the forward pass and the backward pass.
+
+The kernel size $k$, padding $p$ and stride $s$ parameters of the convolution affect the corresponding
+transposed convolution as well. The detailed relationship is well documented By V. Dumoulin and F. Visin in
+\cite{dumoulin:conv_arithmetic}. In particular, for the previous convolution example whose input size $i = 4$,
+the associated transposed convolution can be described by $i'$, $k' = k', $s' = 1$ and $p' = k - p - 1$,
+where $i'$ is the size of the input dilated by $s - 1$ zeros. The output size is:
+
+\begin{equation}
+  o' = s(i' - 1) + k - 2p.
+\end{euqation}
+
+In practice, the tranposed convolution can be implemented 
 
 \section{Batch Normalization Layer}
 

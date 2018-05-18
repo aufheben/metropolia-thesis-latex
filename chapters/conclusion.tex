@@ -1,6 +1,6 @@
 % Conclusions
 
-\chapter{Conclusions and Future Work}
+\chapter{Conclusions}
 
 This section concludes the project by briefly discussing possible optimization methods.
 As mentioned before, the main goal of the design was simplicity, so many optimizations were not applied.
@@ -15,7 +15,7 @@ Burst transfer can be used to read data from \gls{psram} and further reduces I/O
 placing the starting address on the address bus, a fixed amount of data is then read repeatedly in a single
 ``burst''.
 
-Another optimization mentioned is to widen the data buses connected to the \gls{psram}. Current the
+Another optimization mentioned is to widen the data buses connected to the \gls{psram}. Currently the
 data address of input buffer is only 8-bit. This can be increased to 32-bit or even more. Multiple data
 can be loaded at the same time and calculation can be performed in parallel on these data. The current
 design is highly sequential and only utilizes around $15\%$ of the \gls{dsp} slices.

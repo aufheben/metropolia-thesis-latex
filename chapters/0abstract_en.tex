@@ -41,10 +41,11 @@
   
   With simplicity as the main goal of the design, some optimizations were deliberately avoided.
   This paper serves as a detailed documentation of the design and implementation process.
-  The core operation of the generative model called transposed
-  convolution is described. A method to map network weights and biases from high precision floating-point
+  Transposed convolution is described which is the core operation of the generative model.
+  A method to map network weights and biases from high precision floating-point
   representation to low precision integral representation, known as quantization, is derived. The
-  quantization scheme leads to an efficient implementation of the General Matrix Multiplication (GEMM) operation,
+  quantization scheme leads to an efficient implementation of the General Matrix Multiplication (GEMM)
+  operation,
   which is at the heart of neural network computations. As a conclusion, possible optimization methods are
   discussed as future work.
 

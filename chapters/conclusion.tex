@@ -30,4 +30,11 @@ several layers can be calculated at the same time. This involves modifying the c
 forward data to subsequent layers in a single pass. Each layer will work on its input concurrently, but
 some global coordination and scheduling is needed in order to avoid data overrun.
 
+More discussion on efficient processing of deep neural networks can be found in
+\cite{DBLP:journals/corr/SzeCYE17}, which includes a section on hardware acceleration.
+Due to the limitations of the development board used in this project, the design runs in a way that may
+appear as a temporal architecture, however, it can be easily modified to become a spatial architecture.
+Memory hierarchy and an optimized dataflow can be utilized to greatly improve efficiency and reduce
+power.
+
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

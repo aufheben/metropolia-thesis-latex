@@ -21,12 +21,12 @@ $\boldsymbol{z}$ of random noises which could be drawn from a normal distributio
 \rightarrow \boldsymbol{x}$ is a mapping from the $\boldsymbol{z}$ space to the data space $\boldsymbol{x}$.
 
 During the training, two types of examples are fed to $D$: existing training examples and examples generated
-by $G$. The system can be trained with regular stochastic gradient descent and backpropagation. The training
+by $G$. The system can be trained with regular \gls{sgd} and backpropagation. The training
 process improves the ability of both $D$ and $G$, until eventually the output of $G$ is indistinguishable
 from real examples to $D$, that is, the output of $D$ approaches $1/2$. Once trained, $D$ can be discarded
 and $G$ can be used in different applications.
 
-In the original paper both networks are \glspl{mlp}. However, many different network types have been
+In the original paper, both networks are \glspl{mlp}. However, many different network types have been
 proposed since then. In this project, $D$ and $G$ are both deep \glspl{cnn} \cite{radford:conv_gan}
 which are suitable for image processing. The training is done on GPU with floating-point numbers. Since $D$ is
 discarded after training, we will be on only concerned with $G$ from this point.
@@ -43,7 +43,7 @@ discarded after training, we will be on only concerned with $G$ from this point.
 Figure \ref{fig:network_structure} shows the network structure of $G$, with five transposed convolutional (TC)
 layers and their output dimensions. Except for the last TC layer, each of the previous four TC layers is
 followed by a layer of batch normalization (BN), and a layer of \gls{relu} for activation. The last TC layer
-is followed by a $tanh$ layer for activation. The function of BN and ReLU layers will be explained later.
+is followed by a Tanh layer for activation. The function of BN and activation layers will be explained later.
 The parameters for each layer is detailed in Table \ref{table:network_layers}. The network structure is
 rather simple, compared with other much larger networks. ResNet, for example, contains a deep cascade of
 152 layers.
@@ -78,9 +78,9 @@ rather simple, compared with other much larger networks. ResNet, for example, co
 
 In \gls{cnn}s, convolutional layer extracts various features from the input, essentially performing a
 downsampling operation. Transposed convolutional layer \cite{transposed_convolution}, also known as
-fractionally strided convolutional layers, or sometime erroneously as deconvolutional layer, on the other
+fractionally strided convolutional layer, or sometime erroneously as deconvolutional layer, on the other
 hand performs upsampling on the input.  Upsampling is needed in the generator model to successively map the
-$1 \times 100$ random noise input to a much larger $3 \times 64 \times 64$ output. Unsampling of data is often
+$1 \times 100$ random noise input $\boldsymbol{z}$ to a much larger $3 \times 64 \times 64$ output. Upsampling of data is often
 done with interpolation, but transposed convolution as a novel approach can map the input to a richer space
 than what can be achieved with interpolation. It also offers trainability which makes it useful for neural
 networks. Conceptually, if a convolution layer of stride $s$ is run backwards, it can be seen as convolution
@@ -91,7 +91,7 @@ layer with stride $1/s$, hence the name fractionally strided convolution.
 To understand the operation of transposed convolution, it is perhaps natural to start with the regular
 convolution first by working through a simple numerical example. With convolution, the input and output
 can both have multiple channels. A convolutional kernel has the same number of channels that matches the
-input channels. The number of kernels determines the number of output channels, i.e., each
+the number of input channels. The number of kernels determines the number of output channels, i.e., each
 kernel generates one output channel. For instance, for a $2D$ convolution for which the number of input
 channels and output channels are both $1$, a single one-channel $2D$ kernel is needed. Let the input be
 a $4 \times 4$ matrix $A$:
@@ -116,7 +116,7 @@ K =
   \end{pmatrix}
 $$
 
-Except the kernel size $k$ ($2$ in this case),
+In addition to the kernel size $k$ ($2$ in this case),
 a convolution can have some extra parameters. Padding size $p$ pads the input with $p$ rows or columns
 of zeros at the borders. Stride size $s$ is the step size to slide the kernel. Assume the convolution operates
 with $p = 1$ and $s = 2$, that is, $K$ is slid across the zero-padded matrix $B$ with a step of
@@ -151,7 +151,7 @@ $$
 In practice, the sliding-window approach is inefficient for implementation. All practical implementations
 use a pair of operations called $im2col$ and $col2im$ to wrap a single matrix multiplication. Since
 matrix multiplication is such a fundamental operation that its algorithm has been highly optimized over the
-decades, and this vindicates the memory overhead caused by $im2col$. To start, flatten $K$ into a row vector
+decades, this vindicates the memory overhead caused by $im2col$. To start, flatten $K$ into a row vector
 $K_{row}$:
 
 $$
@@ -232,16 +232,16 @@ it is very easy to derive the \textit{backward pass}. The example convolution ma
 to an output of $3 \times 3$. To reverse the direction of input and output, namely, to take an input of
 $3 \times 3$ and produce an output of $4 \times 4$, all it takes is to transpose $M$ to obtain $M^\intercal$
 of $36 \times 9$. When $M^\intercal$ is applied to the an $3 \times 3$ input unrolled to $9 \times 1$, the
-resulting $36 \times 1$ matrix is then reshaped to the desired $4 \times 4$ output. Hence the name
+resulting $36 \times 1$ matrix is then reshaped to the desired $4 \times 4$ output (with a padding of $1$). Hence the name
 \textit{transposed convolution}.
 
-It needs to be pointed out that the term \textit{backward pass} instead of \textit{inverse operation},
+It needs to be pointed out that the term \textit{backward pass} instead of \textit{inverse operation} was used,
 since $M^\intercal$ does not recover the numerical values of $B$ from $C$, it only recovers the shape of $B$,
 therefore it is misleading to call this operation deconvolution. Also, the same kernel $K$ defines both
 the forward pass and the backward pass.
 
 The kernel size $k$, padding $p$ and stride $s$ parameters of the convolution affect the corresponding
-transposed convolution as well. The detailed relationship is well documented By V. Dumoulin and F. Visin in
+transposed convolution as well. The detailed relationship is well documented by V. Dumoulin and F. Visin in
 \cite{dumoulin:conv_arithmetic}. For instance, the previous convolution example has an input size $i = 4$,
 which satisfies the condition $(i + 2p - k \mod s) = 0$, then the associated transposed convolution
 (input size $i' = 3$) can be described by a regular convolution on input size $\tilde{i}'$ and parameters
@@ -279,7 +279,7 @@ A'' =
   \end{pmatrix}
 $$
 
-Convolve $A''$ (without padding since $p' = 0$) with the same kernel 'K' using stride $s' = 1$, the result
+Convolve $A''$ (without padding since $p' = 0$) with the same kernel $K$ using stride $s' = 1$, the result
 is
 
 $$
@@ -317,9 +317,9 @@ root.
 \section{Activation Layer}
 
 Activation function, also known as \textit{transfer function}, adds non-linearity to the network. It is often
-attached to the output of a layer, typically mapping the results to the range $(0, 1)$ or $(-1, 1)$, although
-other possibilities exist. Assume the functions maps the input to range $(0, 1)$, a value close to $0$ would
-be seen as "off" or "no", a value close to $1$ would be seen as "on" or "yes". This indicates whether the
+attached to the output of a layer, typically mapping the results to the range $(0, 1)$ or $(-1, 1)$, albeit
+other possibilities exist. Assume the function maps the input to range $(0, 1)$, a value close to $0$ would
+be seen as ``off'' or ``no'', a value close to $1$ would be seen as ``on'' or ``yes''. This indicates whether the
 following connection should see this output as activated or not, hence the name activation function.
 
 \begin{figure}[h]
@@ -330,7 +330,7 @@ following connection should see this output as activated or not, hence the name 
 \end{figure}
 
 Many different types of activation functions exist with two main categories: linear and nonlinear. A commonly
-used sigmoid (S-shaped) function is $y = \frac{1}{1 + e^{-x}}$, shown in figure \ref{fig:sigmoid}.
+used nonlinear sigmoid (S-shaped) function is $y = \frac{1}{1 + e^{-x}}$, shown in figure \ref{fig:sigmoid}.
 
 \subsection{ReLU Layer}
 
@@ -349,14 +349,14 @@ ReLU is very popular nowadays. It is defined as
 
 As shown in figure \ref{fig:relu}, it is worth noting that ReLU is in fact nonlinear. When compared
 with the sigmoid function, the
-gradient of ReLU does not saturate when $x$ gets large, which makes \gls{sgd} convergence faster. In addition,
+gradient of ReLU does not saturate when $x$ gets large, which makes \gls{sgd} converge faster. In addition,
 since all negative values are converted to zero, it adds the desirable feature of sparsity to the network,
 leading to more efficient computation. The implementation of ReLU is of course straightforward.
 
 \subsection{Tanh Layer}
 
 The hyperbolic tangent function $tanh$ is another widely used activation function. It works similarly to the
-sigmoid function with the additional property of being symmetrical with respect to the origin.
+sigmoid function with the additional property of being symmetrical with respect to the origin. In the \gls{dcgan} model, the Tanh layer is used as the last layer to output the final generated image.
 
 \begin{equation} \label{eq:tanh}
   \begin{split}

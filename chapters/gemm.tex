@@ -27,9 +27,9 @@ different orders to store the same matrix: row-major order or column-major order
 entries of rows are stored contiguously in memory, while in column-major order, entries of columns are
 consecutive to each other in memory.
 
-A naïve implementation of \gls{gemm} is shown in Listing \ref{code:naivegemm}. Here,
+A naïve C implementation of \gls{gemm} is shown in Listing \ref{code:naivegemm}. Here,
 \mintinline{c}{lda}, \mintinline{c}{ldb} and \mintinline{c}{ldc} are
-leading dimension of matrix $A$, $B$ and $C$, respectively.
+the leading dimensions of matrix $A$, $B$ and $C$, respectively.
 
 \begin{code}
 \begin{minted}{c}

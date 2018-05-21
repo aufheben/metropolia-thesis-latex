@@ -4,17 +4,17 @@
 
 \section{Development Environment and Method}
 
-Xilinx Vivado version 2017.04 is used as the development platform for \gls{fpga}. The typical workflow involves
+Xilinx Vivado version 2017.04 was used as the development platform for \gls{fpga}. A typical workflow involves
 the following steps:
 
 \begin{itemize}
-  \item Design the functionality of module and the I/O ports
+  \item Design the functionality of \gls{rtl} module and the I/O ports
   \item Implement the module in Verilog, add IP blocks if necessary
-  \item Write the testbench for the module, run behavioral simulation to confirm the module behaves as
+  \item Write a testbench for the module, run behavioral simulation to confirm the module behaves as
     expected
   \item Run synthesis and implementation
   \item View synthesis and implementation reports to see if there are any issues, especially with timing
-  \item Create bitstream and test on device
+  \item Generate bitstream and test on the device
 \end{itemize}
 
     A parallel C implementation is developed on Linux simultaneously to facilitate the \gls{fpga} development.
@@ -83,7 +83,7 @@ begin
     endcase
 end
 \end{minted}
-  \captionof{listing}{Simple for-loop in Verilog}
+  \captionof{listing}{Equivalent for-loop in Verilog}
 \label{code:simple_for_verilog}
 \end{code}
 
@@ -94,14 +94,14 @@ The merged C code of \mintinline{c}{gemm} and \mintinline{c}{col2im} shown in li
 as a template.
 
 The \mintinline{c}{transconv} module is connected to the input, weight, and output \glspl{bram}. A single
-8-bit or 32-bit data is read or written in every cycle, which is quite inefficient. On the other hand,
+8-bit or 32-bit value is read or written in every cycle, which is quite inefficient. On the other hand,
 although the data bus width can be configured for the \gls{bram}, a maximum of two read ports are available.
-So it is possible to increase the data bus width to read more bytes in each cycle, but this is left
-as a future work for optimization. Indeed, I/O is the main bottleneck in the design, as in many other systems.
+It is possible to increase the data bus width to read more bytes in each cycle, but this is left
+as a future work for optimization. Indeed, I/O is the main bottleneck of the design, as in many other systems.
 
 The DSP48 Macro IP is utilized to accomplish computations with multiplication and accumulation. The first
 block implements the operations shown in table \ref{table:dsp48_0_operations}. The second block is the core
-MACC unit, and only contains $P \leftarrow A*B+P$.
+\gls{mac} unit, which only contains $P \leftarrow A*B+P$.
 
 \begin{table}[h]
   \centering
@@ -150,10 +150,10 @@ using more pipeline registers, the results has a larger clock latency but $F_{ma
 
 The batch normalization layer, ReLU layer, and Tanh layer are implemented with floating-point numbers.
 Xilinx Vivado is shipped with a Floating-point IP which supports many common operations, including
-conversion between fixed-point and floating-point formats, multiplication, accumulation, exponential,
+conversion between fixed-point and floating-point formats, multiplication, accumulation, exponential function,
 inverse square root, and many others. The input precision can be configured as half, single or
 double-precision, or even customized width of exponent and fraction. It is also possible to choose
-DSP slice usage, from logic only to a maximum utilization of DSP48 slices. Finally, the user is able to decide
+DSP slice usage, from logic only to maximum utilization of DSP48 slices. Finally, the user is able to decide
 the goal of optimization, using minimum resources or maximum clock frequency $F_{max}$. Choosing maximum
 clock frequency helps with the eventual timing closure, just as the case with DSP48 pipelining. An example
 floating-point multiplier is shown in figure \ref{fig:floating_point_multiplier}.
@@ -167,8 +167,8 @@ floating-point multiplier is shown in figure \ref{fig:floating_point_multiplier}
 
 \section{Testbench}
 
-Writing testbenches and performing simulation is a key step in \gls{fpga} development. In this project,
-each module is developed as separate projects with a corresponding testbench module and a synthesizable
+Writing testbenches and performing simulations are a key step in \gls{fpga} development. In this project,
+each module was developed as a separate project with a corresponding testbench module and a synthesizable
 top module. The contents of these two modules are largely similar, but the testbench module usually operates
 on relatively simple data to make simulation easier. Once a module has passed simulation and on-board test,
 it is imported and integrated into the main project.
@@ -176,7 +176,7 @@ it is imported and integrated into the main project.
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.5]{behavioral_simulation}
-  \caption{Behavioral Simulation of Transposed Convolution Module}
+  \caption{Behavioral Simulation of $transconv$ Module}
   \label{fig:behavioral_simulation}
 \end{figure}
 

@@ -56,12 +56,11 @@ the variables used for transposed convolution.
 \begin{itemize}
   \item \mintinline{c}{inputHeight} and \mintinline{c}{inputWidth} are the height and width of each input
     channel (sometimes also called input plane)
-  \item \mintinline{c}{nInputChannel} is the number of input channel in total, thus the input is a
+  \item \mintinline{c}{nInputChannel} is the number of input channels in total, thus the input is a
     $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, inputHeight, inputWidth)}
   \item With \mintinline{c}{m = inputHeight * inputWidth} and \mintinline{c}{k = nInputChannel}, the input
     tensor is stored as a matrix $A \in \mathbb{R}^{m \times k}$
-  \item \mintinline{c}{kernelH} and \mintinline{c}{kernelW} are the height and width of each
-    convolutional kernel channel
+  \item \mintinline{c}{kernelH} and \mintinline{c}{kernelW} are the height and width of each kernel channel
   \item Each kernel is also a $3D$ tensor with dimensions \mintinline{c}{(nInputChannel, kernelH, kernelW)}
   \item \mintinline{c}{nOutputChannel} is the number of output channels
   \item There are \mintinline{c}{nOutputChannel}'s of kernels, each responsible for producing an output channel
@@ -96,8 +95,8 @@ for (int j = 0; j < n; ++j) {
 \label{code:col2im}
 \end{code}
 
-Here \mintinline{c}{data_im} is the target image while \mintinline{c}{data_col} is the result of \gls{gemm}.
-The outermost loop iterates through the columns of $C \in \mathbb{R}^{k \times n}$. The two nested loops
+Here \mintinline{c}{data_im} is the target image while \mintinline{c}{data_col} is the result of \gls{gemm}, namely, \mintinline{c}{c} in listing \ref{code:naivegemm}.
+The outermost loop iterates through the columns of $C \in \mathbb{R}^{m \times n}$. The two nested loops
 iterate the rows of $C$, since \mintinline{c}{m = inputHeight * inputWidth}. \mintinline{c}{c_im} is the
 index of the channel in the output image. %\mintinline{c}{h_offset} and \mintinline{c}{w_offset} are the offset in each 
 
@@ -140,12 +139,12 @@ for (int c_im = 0; c_im < nOutputChannel; c_im++) {
 \end{code}
 
 The key to understand this code of merge is to notice that the for-loop indexed by \mintinline{c}{j} in
-\mintinline{c}{gemm} can be split into three nested for-loop indexed by \mintinline{c}{c_im},
+\mintinline{c}{gemm} can be split into three nested for-loops indexed by \mintinline{c}{c_im},
 \mintinline{c}{h_offset} and \mintinline{c}{w_offset}.
 Similarly, the for-loop indexed by \mintinline{c}{i} in \mintinline{c}{gemm} is equivalent to the two
-nested for-loop indexed by \mintinline{c}{h_col} and \mintinline{c}{w_col}, same as in \mintinline{c}{col2im}.
+nested for-loops indexed by \mintinline{c}{h_col} and \mintinline{c}{w_col}, same as in \mintinline{c}{col2im}.
 
 This last C code in listing \ref{code:transposed_convolution_in_c} serves as the blueprint for implementing
-transposed convolution on \gls{fpga} with Verilog.
+transposed convolution on \gls{fpga} with Verilog. It can be seen from this code that the output channels can be computed in groups or even by each channel individually. This is a convenient fact when the weights of a layer cannot be fit into the \gls{bram} on the \gls{fpga} chip all at once.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

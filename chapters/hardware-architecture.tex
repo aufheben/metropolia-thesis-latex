@@ -26,7 +26,7 @@ Table \ref{table:hardware_resources} summarizes the hardware resources available
 \gls{bram} will be the main active memory for input, output, weight, and bias data. The \gls{fpga} chip in use
 contains 4860 Kbits of \gls{bram} or 607.5 KB. The original model size is around 13.7 MB, which is
 considered very compact when compared with other deep learning models but still very demanding for
-our system. Once quantized, the model size is roughly 3.5 MB. So it is not possible to fit the entire model
+our system. Once quantized, the model size is roughly 3.5 MB. Therefore, it is not possible to fit the entire model
 into the \gls{bram} and it is inevitable to interact with external storage devices, e.g., the 16 MB Quad-SPI
 Flash or the 16 MB \gls{psram} on the Nexys 4 board.
 
@@ -61,9 +61,9 @@ layer.
 
 In table \ref{table:memory_requirements}, the numbers in parentheses are the bit width of the values. The table
 indicates the maximum input/output size is 65536 in 32-bit, the maximum weight size is 2097152 in 8-bit, the
-maximum bias size is 512 in 32-bit. However, notice that when both input is 65536 in 32-bit, the corresponding
+maximum bias size is 512 in 32-bit. However, notice that when input is 65536 in 32-bit, the corresponding
 layers are batch normalization and ReLU. This means that the same buffer can be used to store both the
-input and output because the input can be updated in-place. Consequently the input buffer only needs to
+input and output for these layers because the input can be updated in-place. Consequently the input buffer only needs to
 store 65536 values in 8-bit.
 
 To conclude, three main \gls{bram} buffers are needed: input buffer (65536 bytes),
@@ -81,12 +81,12 @@ convolutional layer are read and the process continues until it reaches the fina
 
 \section{Architecture}
 
-The system stores weights of transposed convolutional layer in the 16MB Quad-SPI Flash. The input is
+The system stores the weights of transposed convolutional layers in the 16MB Quad-SPI Flash. The input is
 forwarded into a computation unit which contains a transposed convolution module TC,
-a batch normalization module BN, a ReLU module ReLU, and a tanh module Tanh.
-The unit can be configured to be TC-BN-ReLU or TC-Tanh. The network computes one
-layer at a time, writing the output to the output buffer. Before reaching the final layer, the output of
-the computation unit is written to the input buffer, overwriting the previous input. The final result is
+a batch normalization module BN, a ReLU module ReLU, and a $tanh$ module Tanh.
+The unit can be configured as TC-BN-ReLU or TC-Tanh. The network computes one
+layer at a time, writing the output to the output buffer (except for the ReLU module). Before reaching the final layer, the output of
+the computation unit (the output of the ReLU module) is written to the input buffer, overwriting the previous input. The final output of the Tanh module is
 sent to PC via \gls{uart} (serial port). Figure \ref{fig:computation_unit} shows the structure of the
 computation unit.
 
@@ -98,11 +98,11 @@ computation unit.
 \end{figure}
 
 The input of the TC module are quantized 8-bit integers. The output of the TC module are 32-bit
-integers, which are input to the BN module. The BN first dequantizes the 32-bit input to 32-bit
+integers, which are the input to the BN module. The BN module first dequantizes the 32-bit input to 32-bit
 single-precision floating-point numbers according to IEEE 754 standard, then the computation is carried
 out in floating-point and the results are fed to the ReLU module, which simply sets negative values to
 $0.0$ and then quantizes the output to 8-bit integers again and overwrites the input buffer with the
-results. This quantization process is done by calculating quantization parameters on the fly.
+results. This quantization process is done by calculating the quantization parameters on the fly.
 When the flow reaches the final Tanh module, the 32-bit input integers are dequantized just as the
 BN module, $tanh$ is then performed on the floating-point numbers, and the final floating-point result is
 sent to the computer through \gls{uart} and converted to PNG format with a simple conversion script.

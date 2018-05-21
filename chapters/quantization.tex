@@ -13,7 +13,7 @@
 Machine learning programs normally represent numbers as floating-point. Although floating-point numbers
 have limited precision and can sometimes lead to numerical instability when the numbers involved get too
 small or too large, they are intuitive and easy to work with. But floating-point arithmetic can be rather
-expensive to implement in hardware. Modern \glspl{fpga} contain dedicated \gls{dsp} unit, some of which
+expensive to implement in hardware. Modern \glspl{fpga} contain dedicated \gls{dsp} units, some of which
 natively
 support floating-point, others require special \gls{ip} cores to implement the relevant
 circuitry. \gls{fpga}'s processing power mainly shines on fixed-point. In order to run our model in fixed-point
@@ -22,16 +22,16 @@ quantization. When the result is computed by \gls{fpga}, it is then converted ba
 naturally called dequantization.
 
 Quantization brings additional benefits with the compression of model size. When 32-bit floating-point
-numbers are quantized to 8-bit, the model size is reduced by $75\%$. This cuts down memory bandwidth
+weights are quantized to 8-bit, the model size can be reduced up to $75\%$. This cuts down memory bandwidth
 requirement and improves memory efficiency. Consequently, the power consumption can be greatly reduced.
 
-One could imagine that quantization would cause a tremendous loss to model precision, for example, when
-32-bit floating-point numbers (ranging from $1.175494351 \times 10^{-38}$ to $3.402823466 \times 10^{38}$)
+One could imagine that quantization would cause a tremendous loss to the precision of a model, for example, when
+32-bit floating-point numbers 
 are converted to
-8-bit unsigned integers (ranging from 0 to 255). However, one of the peculiar
+8-bit unsigned integers, the range drops from $(1.175494351 \times 10^{-38}, 3.402823466 \times 10^{38}$ to $(0, 255)$. However, one of the peculiar
 properties of neural networks is that they are very resilient to noise. Of course this is also one of the
 reasons why they are so successful in real world applications. We could view the internal precision loss of
-quantization as a form of internal noise, it turned out that the precision loss incurred is rather small.
+quantization as a form of internal noise. It turned out that the precision loss incurred is rather small \cite{37631}.
 
 There exist several different quantization methods. This project adopted the quantization scheme
 implemented in Google's \textit{gemmlowp} library \cite{github:gemmlowp}
@@ -44,8 +44,8 @@ integers to accommodate the accumulation. Eventually the final output of the mod
 \mintinline{c}{float}.
 
 The quantization works by first identifying the range of the data. In neural networks, the values are usually
-distributed within a relatively small range. For instance, for 8-bit quantization, if the minimum of the
-weights is $-10.0$ and maximum is $20.0$, then $-10.0$ would be mapped to $0$, and $20.0$ mapped to $255$.
+distributed within a relatively small range. For instance, for 8-bit quantization, if the minimum value of the
+weights is $-10.0$ and maximum value is $20.0$, then $-10.0$ would be mapped to $0$ while $20.0$ would be mapped to $255$.
 However, there is an additional requirement that can bring great benefits to subsequent computations:
 the real value $0$ should be exactly representable. As will be shown, this can be achieved with a small
 modification to the mapping equation.
@@ -60,10 +60,10 @@ real value $0$ is exactly representable:
 \end{equation}
 
 where $Z \in \mathbb{N}$ is a constant shift applied to $q$. Since convolution and transposed convolution
-both can involve zero-padding, having an exact representation of $0$ avoids the accumulation of errors
+both can involve zero-paddings, having an exact representation of $0$ avoids the accumulation of errors
 (essentially a form of bias). With this form of affine mapping, $0$ is trivially mapped to $q = Z$. $S$ and
 $Z$ are called the quantization parameters of this mapping. From equation \ref{eq:dequantization},
-it is clear the quantization mapping is done with
+it is clear that the quantization mapping is done with
 
 \begin{equation} \label{eq:quantization}
   q = \frac{f}{S} + Z
@@ -71,7 +71,7 @@ it is clear the quantization mapping is done with
 
 Let $A \in \mathbb{R}^{m \times k}$, $B \in \mathbb{R}^{k \times n}$, $A B = C \in \mathbb{R}^{m \times n}$,
 let the corresponding quantization parameters for $A$, $B$ and $C$ be $S_A$ and $Z_A$, $S_B$ and $Z_B$,
-$S_C$ and $Z_C$. These parameters are predetermined, since in most cases the range of numbers in these matrices
+$S_C$ and $Z_C$. These parameters can be predetermined, since in most cases the ranges of numbers in these matrices
 are known. Let $p$, $q$, $r$ be the entries in the quantized version of $A$, $B$ and $C$. 
 
 For an entry $f_C$ in $C$, $f_C = \sum_{i}^{} A_i B_i$, where $i$ is the index of entries in a particular
@@ -86,7 +86,7 @@ row in $A$ and corresponding column in $B$,
 \end{equation}
 
 Clearly the term $\sum_{i} (p_i - Z_A) (q_i - Z_B)$ is the computational core here, let it be
-$\mathfrak{K}$. We have
+$\mathfrak{K}$. Then,
 
 \begin{equation}
 \begin{split}
@@ -95,12 +95,12 @@ $\mathfrak{K}$. We have
 \end{split}
 \end{equation}
 
-Therefore, once $\mathfrak{K}$ is computed, we can simply multiply it by a constant multiplier
-$M = \frac{S_A S_B}{S_C}$, then add the zero offset $Z_C$ to obtain the quantized value $r_C$. The
-multiplication by $M$ can be implemented by multiplying an constant integer and right shift the
-result by a fixed number of bits. The computation of $\mathfrak{K}$ might seem problematic at first:
+Therefore, once $\mathfrak{K}$ is computed, it can be simply multiplied by a constant multiplier
+$M = \frac{S_A S_B}{S_C}$ and added the zero offset $Z_C$ to obtain the quantized value $r_C$. The
+multiplication by $M$ can be implemented by multiplying $\mathfrak{K}$ by a constant integer and right shifting the
+result by a fixed number of bits. These can be predetermined as well. The computation of $\mathfrak{K}$ might seem problematic at first glance:
 it contains a subtraction operation for each entry,
-which would bring extra overhead to the \gls{gemm} computation. Let us expand this expression:
+which would bring extra overhead to the \gls{gemm} computation. To solve this, expand the expression $\mathfrak{K}$:
 
 \begin{equation}
 \begin{split}
@@ -111,14 +111,14 @@ which would bring extra overhead to the \gls{gemm} computation. Let us expand th
 \end{split}
 \end{equation}
 
-Note that $\sum_{i} 1$ is k, the number of columns of $A$ and the number of rows of $B$. Four terms are
+Note that $\sum_{i} 1$ is k, which is the number of columns of $A$ and the number of rows of $B$. Four terms are
 obtained here. The first term $\sum_{i} p_i q_i$ is the main term. The second term, $- Z_B \sum_{i} p_i$
 is the product of $- Z_B$ and the sum of the current row, which only needs to be calculated once and added
 to each result of the first term. The third term $- Z_A \sum_{i} q_i$ and the fourth term $k Z_A Z_B$ are
 similar. The computation can be carried out by computing the first term as the core, and add the rest three
 terms one by one.
 
-\section{Handling of Bias}
+\section{Handling of Biases}
 
 Biases are added to the 32-bit accumulator result. Recall that $f_C = \sum_{i} A_i B_i = S_A S_B \mathfrak{K}$,
 it is clear that biases should be quantized with $S = S_A S_B$ and $Z = 0$. When zero offset is $0$, negative

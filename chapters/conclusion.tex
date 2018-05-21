@@ -5,36 +5,34 @@
 This section concludes the project by briefly discussing possible optimization methods.
 As mentioned before, the main goal of the design was simplicity, so many optimizations were not applied.
 The main bottleneck in the current design, as in many computing systems, is the I/O bandwidth. During
-each clock cycle, only one unit of data is read, which is rather inefficient. Therefore, most of the
-optimizations are focused on improving I/O efficiency.
+each clock cycle, only one unit of data is read or written, which is rather inefficient. Therefore, most of the
+optimization methods naturally focus on improving the I/O efficiency.
 
-The first obvious optimization is to transfer all weight data from Dual-SPI Flash to the \gls{psram} once
-the \gls{fpga} is configured. Weights will be loaded from the \gls{psram} subsequently, which has a parallel
+The first obvious optimization is to transfer all weight data from the Dual-SPI Flash to the \gls{psram} once
+the \gls{fpga} is configured. Weights will be loaded from \gls{psram} subsequently, which has a parallel
 interface and will result in much faster loading of weights.
 Burst transfer can be used to read data from \gls{psram} and further reduces I/O latency. This is done by
 placing the starting address on the address bus, a fixed amount of data is then read repeatedly in a single
 ``burst''.
 
-Another optimization mentioned is to widen the data buses connected to the \gls{psram}. Currently the
+Another optimization mentioned is to widen the data buses connected to the \gls{bram} buffers. Currently, the
 data address of input buffer is only 8-bit. This can be increased to 32-bit or even more. Multiple data
 can be loaded at the same time and calculation can be performed in parallel on these data. The current
 design is highly sequential and only utilizes around $15\%$ of the \gls{dsp} slices.
 
 Yet another optimization is to further introduce several small caches using distributed RAM. These caches
 are implemented using \glspl{lut} and are faster than \glspl{bram}, i.e., they can be read asynchronously.
-Once inputs and weights are loaded into these caches, more parallelism can be achieved,
-making use of more \gls{dsp} slices.
+Once inputs and weights are loaded into these caches, more parallelism can be achieved, utilizing more \gls{dsp} slices.
 
 Finally, on an \gls{fpga} chip with more \gls{bram} capacity, layer-level parallelism can be exploited, i.e.,
 several layers can be calculated at the same time. This involves modifying the current ring structure and
-forward data to subsequent layers in a single pass. Each layer will work on its input concurrently, but
+forwarding data to subsequent layers in a single pass. Each layer will work on its input concurrently, but
 some global coordination and scheduling is needed in order to avoid data overrun.
 
 More discussion on efficient processing of deep neural networks can be found in
 \cite{DBLP:journals/corr/SzeCYE17}, which includes a section on hardware acceleration.
-Due to the limitations of the development board used in this project, the design runs in a way that may
-appear as a temporal architecture, however, it can be easily modified to become a spatial architecture.
-Memory hierarchy and an optimized dataflow can be utilized to greatly improve efficiency and reduce
+Due to the limitations of the development board used in this project, the design runs in a way which appears as a temporal architecture, however, it can be easily modified to become a spatial architecture.
+Memory hierarchy and an optimized dataflow can be utilized to greatly improve overall efficiency and reduce
 power.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

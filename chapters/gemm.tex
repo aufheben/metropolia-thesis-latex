@@ -145,6 +145,9 @@ Similarly, the for-loop indexed by \mintinline{c}{i} in \mintinline{c}{gemm} is 
 nested for-loops indexed by \mintinline{c}{h_col} and \mintinline{c}{w_col}, same as in \mintinline{c}{col2im}.
 
 This last C code in listing \ref{code:transposed_convolution_in_c} serves as the blueprint for implementing
-transposed convolution on \gls{fpga} with Verilog. It can be seen from this code that the output channels can be computed in groups or even by each channel individually. This is a convenient fact when the weights of a layer cannot be fit into the \gls{bram} on the \gls{fpga} chip all at once.
+transposed convolution on \gls{fpga} with Verilog. It can be seen from the code listing
+that the output channels can be computed in groups or even by each channel individually.
+This is a convenient fact when the weights of a layer cannot be fit into the
+\gls{bram} on the \gls{fpga} chip all at once.
 
 \clearpage %force the next chapter to start on a new page. Keep that as the last line of your chapter!

@@ -28,10 +28,11 @@ requirement and improves memory efficiency. Consequently, the power consumption 
 One could imagine that quantization would cause a tremendous loss to the precision of a model, for example, when
 32-bit floating-point numbers 
 are converted to
-8-bit unsigned integers, the range drops from $(1.175494351 \times 10^{-38}, 3.402823466 \times 10^{38}$ to $(0, 255)$. However, one of the peculiar
+8-bit unsigned integers, the range drops from $(1.175494351 \times 10^{-38}, 3.402823466 \times 10^{38})$ to $(0, 255)$. However, one of the peculiar
 properties of neural networks is that they are very resilient to noise. Of course this is also one of the
 reasons why they are so successful in real world applications. We could view the internal precision loss of
-quantization as a form of internal noise. It turned out that the precision loss incurred is rather small \cite{37631}.
+quantization as a form of internal noise. It turned out that the precision loss incurred is rather small
+\cite{vincent2011}.
 
 There exist several different quantization methods. This project adopted the quantization scheme
 implemented in Google's \textit{gemmlowp} library \cite{github:gemmlowp}
